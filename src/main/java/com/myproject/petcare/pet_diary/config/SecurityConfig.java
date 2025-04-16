@@ -43,7 +43,14 @@ public class SecurityConfig {
 
         // 경로별 인가 작업
         http.authorizeHttpRequests((auth) -> auth
-                .requestMatchers("/", "/api/v1/auth/**").permitAll()
+                .requestMatchers(
+                        "/",
+                        "/resources/**",      // 정적 리소스 (CSS, JS, 이미지 등)
+                        "/static/**",         // 추가 정적 리소스 경로
+                        "/WEB-INF/**",  // JSP 파일 경로 (직접 접근 방지용)
+                        "/api/v1/auth/**",
+                        "/signup"
+                ).permitAll()
                 .anyRequest().authenticated());
 
         // 세션 설정 : JWT를 통한 인증/ 인가를 위해서 세션을 STATELESS 상태로 설정

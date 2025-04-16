@@ -10,10 +10,12 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class AuthController {
@@ -21,17 +23,16 @@ public class AuthController {
     private final AuthService authService;
     private final JwtUtil jwtUtil;
 
-    //@Value("${spring.jwt.access-token-expiration-time}")
-    //private Long accessTokenExpTime;
-    //
-    //@Value("${spring.jwt.refresh-token-expiration-time}")
-    //private Long refreshTokenExpTime;
+    @GetMapping("/auth/signup")
+    public String singupPage(Model model){
+        return "signup";
+    }
 
     @PostMapping("/auth/signup")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseDto signup(@RequestBody @Validated SignupReqDto signupReqDto) {
+    public String signup(@ModelAttribute @Validated SignupReqDto signupReqDto) {
         authService.signup(signupReqDto);
-        return new ResponseDto<>(true, "회원 가입 성공", null);
+        return "userInfo";
     }
 
     @PostMapping("/auth/login")

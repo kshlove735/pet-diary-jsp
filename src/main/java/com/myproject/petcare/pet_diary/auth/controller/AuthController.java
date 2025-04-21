@@ -86,7 +86,6 @@ public class AuthController {
         // 회원가입 진행
         try {
             authService.signup(signupReqDto);
-            redirectAttributes.addAttribute("status", true);
             redirectAttributes.addFlashAttribute("message", "회원가입이 완료되었습니다!");
             return "redirect:/api/v1/auth/login";
         } catch (EmailDuplicationException e) {

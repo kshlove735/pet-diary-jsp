@@ -30,9 +30,9 @@ public class AuthService {
     @Transactional
     public void signup(SignupReqDto signupReqDto) {
 
-        // 중복 회원 가입 검증
+        // 이메일 중복 검증
         if (isEmailTaken(signupReqDto.getEmail())) {
-            throw new EmailDuplicationException("이미 등록된 유저입니다.");
+            throw new EmailDuplicationException("이미 사용 중인 이메일입니다.");
         }
 
         User user = new User();
@@ -53,7 +53,7 @@ public class AuthService {
 
         // DB에 저장된 회원인지 여부 검증
         if (findUser == null) {
-            throw new EmailNotFoundException("이메일이 존재하지 않습니다.");
+            throw new EmailNotFoundException("등록된 이메일이 없습니다.");
         }
 
         // password 검증
@@ -75,18 +75,18 @@ public class AuthService {
     @Transactional
     public String refresh(String refreshToken) {
         if (refreshToken == null) {
-            throw new TokenNotFoundException("refresh token이 없습니다.");
+            throw new TokenNotFoundException("Refresh token이 없습니다.");
         }
 
         if (jwtUtil.isExpired(refreshToken)) {
-            throw new ExpiredTokenException("refresh token이 만료되었습니다.");
+            throw new ExpiredTokenException("Refresh token이 만료되었습니다.");
         }
 
         Long id = jwtUtil.getId(refreshToken);
-        User user = userRepository.findById(id).orElse(null);
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("유저를 찾을 수 없습니다."));
 
-        if (user == null || user.getRefreshToken() == null || !user.getRefreshToken().equals(refreshToken)) {
-            throw new NotFoundException("DB에 저장된 refresh token이 없거나 유효하지 않습니다.");
+        if (user.getRefreshToken() == null || !user.getRefreshToken().equals(refreshToken)) {
+            throw new NotFoundException("유효하지 않은 Refresh token입니다.");
         }
 
         String accessToken = jwtUtil.createAccessToken(id, String.valueOf(user.getRole()));

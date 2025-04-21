@@ -4,11 +4,13 @@ body {
     padding: 0;
     background-color: #fff3e0;
 }
+
 .container {
     width: 85%;
     margin: auto;
     padding: 20px;
 }
+
 .header {
     background: linear-gradient(to right, #ff6f61, #ffb88c);
     color: #fff;
@@ -16,11 +18,13 @@ body {
     text-align: center;
     border-radius: 10px;
 }
+
 .header h1 {
     margin: 0;
     font-size: 2.5em;
     text-shadow: 2px 2px #ff4d4d;
 }
+
 .nav {
     background: #ffd1dc;
     padding: 10px;
@@ -28,6 +32,7 @@ body {
     border-radius: 8px;
     margin: 10px 0;
 }
+
 .nav a {
     color: #ff4d4d;
     margin: 0 20px;
@@ -35,9 +40,11 @@ body {
     font-weight: bold;
     transition: color 0.3s;
 }
+
 .nav a:hover {
     color: #ff1a1a;
 }
+
 .form-container, .info-container {
     background: #fff;
     padding: 25px;
@@ -46,20 +53,25 @@ body {
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     border: 2px solid #ffd1dc;
 }
+
 .form-container h2, .info-container h2 {
     color: #ff4d4d;
     text-align: center;
     font-size: 1.8em;
 }
+
 .form-group {
     margin-bottom: 20px;
+    position: relative;
 }
+
 .form-group label {
     display: block;
     color: #333;
     font-weight: bold;
     margin-bottom: 8px;
 }
+
 .form-group input, .form-group select {
     width: 100%;
     padding: 10px;
@@ -67,7 +79,23 @@ body {
     border-radius: 10px;
     font-size: 1em;
     background: #fffaf0;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
 }
+
+.form-group input:focus {
+    outline: none;
+    border-color: #ff6f61;
+}
+
+.form-group input:invalid:not(:placeholder-shown) {
+    border-color: red;
+}
+
+.form-group input:valid:not(:placeholder-shown) {
+    border-color: green;
+}
+
 .form-group input[type="submit"], .btn {
     background: #ff6f61;
     color: #fff;
@@ -78,19 +106,44 @@ body {
     font-size: 1.1em;
     transition: background 0.3s;
 }
+
 .form-group input[type="submit"]:hover, .btn:hover {
     background: #ff4d4d;
+}
+
+.form-group input[type="submit"]:disabled {
+    background: #ccc;
+    cursor: not-allowed;
 }
 
 #checkEmailBtn {
     margin-top: 10px;
     width: auto;
     display: inline-block;
+    padding: 8px 15px;
 }
 
-#emailError {
-    margin-top: 5px;
+/* 에러 메시지 스타일 수정 */
+#emailError, #passwordCheckError, #phoneError {
+    margin-top: 8px; /* 입력 필드와의 간격을 증가 */
     font-size: 0.9em;
+    position: relative; /* absolute 대신 relative로 변경하여 자연스러운 흐름 유지 */
+    width: 100%;
+}
+
+.error {
+    color: red;
+    font-size: 0.9em;
+    text-align: left;
+    margin-top: 8px; /* Spring Form 에러 메시지에도 동일한 간격 적용 */
+    display: block;
+}
+
+.success {
+    color: green;
+    font-size: 0.9em;
+    text-align: left;
+    margin-top: 8px;
 }
 
 table {
@@ -99,36 +152,32 @@ table {
     margin-top: 20px;
     background: #fffaf0;
 }
+
 table, th, td {
     border: 2px solid #ffd1dc;
 }
+
 th, td {
     padding: 12px;
     text-align: center;
 }
+
 th {
     background: #ff6f61;
     color: #fff;
 }
+
 .pet-register-btn {
     margin-top: 20px;
     display: inline-block;
 }
+
 .pet-section h3 {
     color: #ff4d4d;
     text-align: center;
     font-size: 1.5em;
 }
+
 .pet-section {
     margin-top: 30px;
-}
-
-.error {
-    color: red;
-    font-size: 0.9em;
-}
-.success {
-    color: green;
-    font-size: 0.9em;
-    text-align: center;
 }

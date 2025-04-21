@@ -29,6 +29,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             "/resources/**",      // 정적 리소스 (CSS, JS, 이미지 등)
             "/static/**",         // 추가 정적 리소스 경로
             "/WEB-INF/**",  // JSP 파일 경로 (직접 접근 방지용)
+            "/favicon.ico",
             "/api/v1/auth/**");
     private final AntPathMatcher pathMatcher = new AntPathMatcher();
 
@@ -41,7 +42,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String requestURI = request.getRequestURI();
-        return excludedPatterns.stream().anyMatch(pattern -> pathMatcher.match(pattern, requestURI));
+        boolean isExcluded = excludedPatterns.stream().anyMatch(pattern -> pathMatcher.match(pattern, requestURI));
+        log.info("Request URI: {}, Excluded: {}", requestURI, isExcluded);
+        return isExcluded;
     }
 
     @Override

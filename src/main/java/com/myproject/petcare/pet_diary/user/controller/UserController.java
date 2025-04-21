@@ -12,10 +12,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class UserController {
@@ -23,9 +24,9 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/user")
-    public ResponseDto<UserInfoResDto> getUser(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+    public String getUser(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
         UserInfoResDto userInfoResDto = userService.getUser(customUserDetails);
-        return new ResponseDto<>(true, "회원 정보 조회 성공", userInfoResDto);
+        return "userInfo";
     }
 
     @PutMapping("/user")

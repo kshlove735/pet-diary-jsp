@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 @Service
 @Transactional(readOnly = true)
@@ -22,11 +23,15 @@ public class AuthService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtUtil jwtUtil;
 
+    public boolean isEmailTaken(String email){
+        return userRepository.findByEmail(email).isPresent();
+    }
+
     @Transactional
     public void signup(SignupReqDto signupReqDto) {
 
         // 중복 회원 가입 검증
-        if (userRepository.findByEmail(signupReqDto.getEmail()).isPresent()) {
+        if (isEmailTaken(signupReqDto.getEmail())) {
             throw new EmailDuplicationException("이미 등록된 유저입니다.");
         }
 

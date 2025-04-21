@@ -81,6 +81,18 @@ body {
 .form-group input[type="submit"]:hover, .btn:hover {
     background: #ff4d4d;
 }
+
+#checkEmailBtn {
+    margin-top: 10px;
+    width: auto;
+    display: inline-block;
+}
+
+#emailError {
+    margin-top: 5px;
+    font-size: 0.9em;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
@@ -109,4 +121,14 @@ th {
 }
 .pet-section {
     margin-top: 30px;
+}
+
+.error {
+    color: red;
+    font-size: 0.9em;
+}
+.success {
+    color: green;
+    font-size: 0.9em;
+    text-align: center;
 }

@@ -107,12 +107,32 @@ public class AuthController {
     }
 
     @PostMapping("/auth/login")
-    public ResponseDto<LoginResDto> login(@RequestBody @Validated LoginReqDto loginReqDto, HttpServletResponse response) {
-        LoginResDto loginResDto = authService.login(loginReqDto);
-        response.addCookie(createCookie("access", loginResDto.getAccessToken(), jwtUtil.getAccessTokenExpTime().intValue() / 1000));
-        response.addCookie(createCookie("refresh", loginResDto.getRefreshToken(), jwtUtil.getRefreshTokenExpTime().intValue() / 1000));
+    public String login(@ModelAttribute @Validated LoginReqDto loginReqDto,
+                        BindingResult bindingResult,
+                        HttpServletResponse response,
+                        RedirectAttributes redirectAttributes) {
 
-        return new ResponseDto<>(true, "로그인 성공", null);
+        // 유효성 검사 실패 시 로그인 페이지로
+        if (bindingResult.hasErrors()) {
+            log.info("유효성 검사 실패 = {}", bindingResult.getAllErrors());
+            return "login";
+        }
+        try {
+            // 로그인 처리 및 토근 생성
+            LoginResDto loginResDto = authService.login(loginReqDto);
+            // Access Token과 Refresh Token을 쿠키에 저장
+            response.addCookie(createCookie("access", loginResDto.getAccessToken(), jwtUtil.getAccessTokenExpTime().intValue() / 1000));
+            response.addCookie(createCookie("refresh", loginResDto.getRefreshToken(), jwtUtil.getRefreshTokenExpTime().intValue() / 1000));
+            // 성공 메시지 추가
+            redirectAttributes.addFlashAttribute("message", "로그인 성공!");
+            // userinfo 페이지로 리다이렉트
+            return "redirect:/api/v1/user";
+        } catch (Exception e) {
+            // TODO : 오류 메시지 동적 전달 방법 설정
+            log.error("로그인 실패 = {}", e.getMessage(), e);
+            bindingResult.rejectValue("login.failed", "이메일 또는 비밀번호가 잘못되었습니다.");
+            return "login";
+        }
     }
 
     @PostMapping("/auth/refresh")

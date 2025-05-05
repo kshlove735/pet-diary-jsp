@@ -1,3 +1,4 @@
+/* 기본 레이아웃 */
 body {
     font-family: 'Comic Sans MS', 'Arial', sans-serif;
     margin: 0;
@@ -11,6 +12,7 @@ body {
     padding: 20px;
 }
 
+/* 헤더 스타일 */
 .header {
     background: linear-gradient(to right, #ff6f61, #ffb88c);
     color: #fff;
@@ -25,6 +27,7 @@ body {
     text-shadow: 2px 2px #ff4d4d;
 }
 
+/* 내비게이션 스타일 */
 .nav {
     background: #ffd1dc;
     padding: 10px;
@@ -45,6 +48,7 @@ body {
     color: #ff1a1a;
 }
 
+/* 폼 및 정보 컨테이너 */
 .form-container, .info-container {
     background: #fff;
     padding: 25px;
@@ -60,6 +64,7 @@ body {
     font-size: 1.8em;
 }
 
+/* 폼 그룹 스타일 */
 .form-group {
     margin-bottom: 20px;
     position: relative;
@@ -96,6 +101,14 @@ body {
     border-color: green;
 }
 
+/* 추가: 비활성화된 입력 필드 스타일 */
+.form-group input[disabled] {
+    background-color: #f0f0f0;
+    cursor: not-allowed;
+    border-color: #ccc;
+}
+
+/* 버튼 스타일 */
 .form-group input[type="submit"], .btn {
     background: #ff6f61;
     color: #fff;
@@ -105,6 +118,8 @@ body {
     border-radius: 12px;
     font-size: 1.1em;
     transition: background 0.3s;
+    margin: 5px;
+    display: inline-block;
 }
 
 .form-group input[type="submit"]:hover, .btn:hover {
@@ -116,6 +131,27 @@ body {
     cursor: not-allowed;
 }
 
+/* 추가: 비밀번호 토글 버튼 스타일 */
+.toggle-password {
+    background: #ffd1dc;
+    color: #ff4d4d;
+    padding: 8px 12px;
+    margin-top: 8px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.toggle-password:hover {
+    background: #ff4d4d;
+    color: #fff;
+}
+
+#changeButton {
+    display: none;
+}
+
 #checkEmailBtn {
     margin-top: 10px;
     width: auto;
@@ -123,11 +159,11 @@ body {
     padding: 8px 15px;
 }
 
-/* 에러 메시지 스타일 수정 */
+/* 에러 및 성공 메시지 */
 #emailError, #passwordCheckError, #phoneError {
-    margin-top: 8px; /* 입력 필드와의 간격을 증가 */
+    margin-top: 8px;
     font-size: 0.9em;
-    position: relative; /* absolute 대신 relative로 변경하여 자연스러운 흐름 유지 */
+    position: relative;
     width: 100%;
 }
 
@@ -135,7 +171,7 @@ body {
     color: red;
     font-size: 0.9em;
     text-align: left;
-    margin-top: 8px; /* Spring Form 에러 메시지에도 동일한 간격 적용 */
+    margin-top: 8px;
     display: block;
 }
 
@@ -146,6 +182,7 @@ body {
     margin-top: 8px;
 }
 
+/* 테이블 스타일 */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -180,4 +217,34 @@ th {
 
 .pet-section {
     margin-top: 30px;
+}
+
+/* 팝업 창 스타일 (passwordChange.jsp) */
+.popup {
+    padding: 20px;
+    background-color: #fff;
+    max-width: 400px;
+    margin: 0 auto;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border: 2px solid #ffd1dc;
+}
+
+.popup h2 {
+    color: #ff4d4d;
+    text-align: center;
+    font-size: 1.8em;
+    margin-top: 0;
+}
+
+/* 추가: 반응형 디자인 */
+@media (max-width: 600px) {
+    .form-group input, .form-group select {
+        font-size: 0.9em;
+        padding: 8px;
+    }
+    .form-group input[type="submit"], .btn {
+        padding: 10px 20px;
+        font-size: 1em;
+    }
 }

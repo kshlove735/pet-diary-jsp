@@ -2,6 +2,7 @@ package com.myproject.petcare.pet_diary.user.service;
 
 import com.myproject.petcare.pet_diary.common.exception.custom_exception.InvalidPasswordException;
 import com.myproject.petcare.pet_diary.jwt.CustomUserDetails;
+import com.myproject.petcare.pet_diary.pet.entity.Pet;
 import com.myproject.petcare.pet_diary.user.dto.CheckPasswordReqDto;
 import com.myproject.petcare.pet_diary.user.dto.UpdatePasswordReqDto;
 import com.myproject.petcare.pet_diary.user.dto.UpdateUserReqDto;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -24,7 +27,10 @@ public class UserService {
 
     public UserInfoResDto getUser(CustomUserDetails customUserDetails) {
         User user = getUserFromUserDetails(customUserDetails);
-        return new UserInfoResDto(user.getEmail(), user.getName(), user.getPhone());
+
+        // 강아지 정보 포함하여 리턴
+        List<Pet> pets = user.getPets();
+        return new UserInfoResDto(user.getEmail(), user.getName(), user.getPhone(), pets);
     }
 
     @Transactional

@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,13 +25,16 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/user")
-    public String getUser(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+    public String getUser(@AuthenticationPrincipal CustomUserDetails customUserDetails,
+                          Model model) {
+        // 유저 정보 조회
         UserInfoResDto userInfoResDto = userService.getUser(customUserDetails);
+        // JSP에 렌더링할 데이터 추가
+        model.addAttribute("userInfo", userInfoResDto);
         return "userInfo";
     }
 
     @PutMapping("/user")
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseDto<UserInfoResDto> updateUser(
             @RequestBody @Validated UpdateUserReqDto updateUserReqDto,
             @AuthenticationPrincipal CustomUserDetails customUserDetails) {

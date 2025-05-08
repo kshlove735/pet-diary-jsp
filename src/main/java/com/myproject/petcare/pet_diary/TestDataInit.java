@@ -36,18 +36,27 @@ public class TestDataInit {
         user.setRole(Role.USER);
         userRepository.save(user);
 
-        Pet pet = new Pet();
-        pet.setName("멍멍이1");
-        pet.setBreed("포메라니안");
-        pet.setBirthDate(LocalDate.parse("1993-10-20"));
-        pet.setGender(Gender.FEMALE);
-        pet.setWeight(new BigDecimal("5.23"));
-        pet.setDescription("설명");
-        pet.changeUser(user);
-        petRepository.save(pet);
+        Pet pet1 = new Pet();
+        pet1.setName("멍멍이1");
+        pet1.setBreed("포메라니안");
+        pet1.setBirthDate(LocalDate.parse("1993-10-20"));
+        pet1.setGender(Gender.FEMALE);
+        pet1.setWeight(new BigDecimal("5.23"));
+        pet1.setDescription("설명");
+        pet1.changeUser(user);
+        petRepository.save(pet1);
+
+        Pet pet2 = new Pet();
+        pet2.setName("멍멍이2");
+        pet2.setBreed("포메라니안");
+        pet2.setBirthDate(LocalDate.parse("1995-10-20"));
+        pet2.setGender(Gender.MALE);
+        pet2.setWeight(new BigDecimal("3.3"));
+        pet2.changeUser(user);
+        petRepository.save(pet2);
 
         Activity activity1 = new Activity(
-                pet,
+                pet1,
                 LocalDate.of(2025, 1, 5),
                 "공원에서 즐거운 산책",
                 ActivityType.WALK,
@@ -57,7 +66,7 @@ public class TestDataInit {
         );
 
         Activity activity2 = new Activity(
-                pet,
+                pet1,
                 LocalDate.of(2025, 1, 15),
                 "집에서 공놀이",
                 ActivityType.PLAY,
@@ -67,7 +76,7 @@ public class TestDataInit {
         );
 
         Activity activity3 = new Activity(
-                pet,
+                pet1,
                 LocalDate.of(2025, 2, 10),
                 "기본 명령 훈련",
                 ActivityType.TRAINING,
@@ -77,7 +86,7 @@ public class TestDataInit {
         );
 
         Activity activity4 = new Activity(
-                pet,
+                pet1,
                 LocalDate.of(2025, 3, 1),
                 "강에서 수영",
                 ActivityType.SWIM,
@@ -87,7 +96,7 @@ public class TestDataInit {
         );
 
         Activity activity5 = new Activity(
-                pet,
+                pet1,
                 LocalDate.of(2025, 3, 20),
                 "친구와 함께 산책",
                 ActivityType.WALK,
@@ -98,7 +107,7 @@ public class TestDataInit {
 
 
         Behavior behavior1 = new Behavior(
-                pet,
+                pet1,
                 LocalDate.of(2025, 1, 3),
                 "낮에 혼자 있을 때 짖음",
                 "분리불안",
@@ -106,7 +115,7 @@ public class TestDataInit {
         );
 
         Behavior behavior2 = new Behavior(
-                pet,
+                pet1,
                 LocalDate.of(2025, 1, 20),
                 "낯선 사람에게 으르렁",
                 "공격성",
@@ -114,7 +123,7 @@ public class TestDataInit {
         );
 
         Behavior behavior3 = new Behavior(
-                pet,
+                pet1,
                 LocalDate.of(2025, 2, 5),
                 "집에서 물건 씹음",
                 "파괴적 행동",
@@ -122,7 +131,7 @@ public class TestDataInit {
         );
 
         Behavior behavior4 = new Behavior(
-                pet,
+                pet1,
                 LocalDate.of(2025, 2, 25),
                 "밤에 계속 돌아다님",
                 "불안",
@@ -130,7 +139,7 @@ public class TestDataInit {
         );
 
         Behavior behavior5 = new Behavior(
-                pet,
+                pet1,
                 LocalDate.of(2025, 3, 15),
                 "다른 개와 잘 어울림",
                 "사회성",
@@ -138,42 +147,42 @@ public class TestDataInit {
         );
 
         Grooming grooming1 = new Grooming(
-                pet,
+                pet1,
                 LocalDate.of(2025, 1, 10),
                 "깔끔하게 목욕 완료",
                 GroomingType.BATH
         );
 
         Grooming grooming2 = new Grooming(
-                pet,
+                pet1,
                 LocalDate.of(2025, 1, 25),
                 "털이 너무 길어서 이발",
                 GroomingType.HAIRCUT
         );
 
         Grooming grooming3 = new Grooming(
-                pet,
+                pet1,
                 LocalDate.of(2025, 2, 15),
                 "발톱이 길어서 정리",
                 GroomingType.NAIL_TRIM
         );
 
         Grooming grooming4 = new Grooming(
-                pet,
+                pet1,
                 LocalDate.of(2025, 3, 5),
                 "귀가 더러워서 청소",
                 GroomingType.EAR_CLEANING
         );
 
         Grooming grooming5 = new Grooming(
-                pet,
+                pet1,
                 LocalDate.of(2025, 3, 25),
                 "치석 제거",
                 GroomingType.TEETH_CLEANING
         );
 
         Health health1 = new Health(
-                pet,
+                pet1,
                 HealthType.VACCINATION,
                 "광견병 예방접종 완료",
                 LocalDate.of(2025, 1, 7),
@@ -182,7 +191,7 @@ public class TestDataInit {
         );
 
         Health health2 = new Health(
-                pet,
+                pet1,
                 HealthType.CHECKUP,
                 "정기 건강검진",
                 LocalDate.of(2025, 1, 30),
@@ -191,7 +200,7 @@ public class TestDataInit {
         );
 
         Health health3 = new Health(
-                pet,
+                pet1,
                 HealthType.SURGERY,
                 "중성화 수술",
                 LocalDate.of(2025, 2, 20),
@@ -200,7 +209,7 @@ public class TestDataInit {
         );
 
         Health health4 = new Health(
-                pet,
+                pet1,
                 HealthType.MEDICATION,
                 "기생충 약 투여",
                 LocalDate.of(2025, 3, 10),
@@ -209,7 +218,7 @@ public class TestDataInit {
         );
 
         Health health5 = new Health(
-                pet,
+                pet1,
                 HealthType.VACCINATION,
                 "종합 백신 접종",
                 LocalDate.of(2025, 3, 28),
@@ -218,7 +227,7 @@ public class TestDataInit {
         );
 
         Meal meal1 = new Meal(
-                pet,
+                pet1,
                 LocalDate.of(2025, 1, 1),
                 "아침 식사 잘 먹음",
                 MealType.BREAKFAST,
@@ -227,7 +236,7 @@ public class TestDataInit {
         );
 
         Meal meal2 = new Meal(
-                pet,
+                pet1,
                 LocalDate.of(2025, 1, 12),
                 "점심으로 간식 조금",
                 MealType.SNACK,
@@ -236,7 +245,7 @@ public class TestDataInit {
         );
 
         Meal meal3 = new Meal(
-                pet,
+                pet1,
                 LocalDate.of(2025, 2, 1),
                 "저녁 식사 완식",
                 MealType.DINNER,
@@ -245,7 +254,7 @@ public class TestDataInit {
         );
 
         Meal meal4 = new Meal(
-                pet,
+                pet1,
                 LocalDate.of(2025, 2, 28),
                 "아침 식사 조금 남김",
                 MealType.BREAKFAST,
@@ -254,7 +263,7 @@ public class TestDataInit {
         );
 
         Meal meal5 = new Meal(
-                pet,
+                pet1,
                 LocalDate.of(2025, 3, 18),
                 "저녁에 간식 요청",
                 MealType.SNACK,

@@ -6,6 +6,8 @@ import com.myproject.petcare.pet_diary.auth.dto.SignupReqDto;
 import com.myproject.petcare.pet_diary.auth.service.AuthService;
 import com.myproject.petcare.pet_diary.common.dto.ResponseDto;
 import com.myproject.petcare.pet_diary.common.exception.custom_exception.EmailDuplicationException;
+import com.myproject.petcare.pet_diary.common.exception.custom_exception.EmailNotFoundException;
+import com.myproject.petcare.pet_diary.common.exception.custom_exception.InvalidPasswordException;
 import com.myproject.petcare.pet_diary.jwt.JwtUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -127,10 +129,17 @@ public class AuthController {
             redirectAttributes.addFlashAttribute("message", "로그인 성공!");
             // userinfo 페이지로 리다이렉트
             return "redirect:/api/v1/user";
-        } catch (Exception e) {
-            // TODO : 오류 메시지 동적 전달 방법 설정
+        } catch (EmailNotFoundException e) {
             log.error("로그인 실패 = {}", e.getMessage(), e);
-            bindingResult.rejectValue("login.failed", "이메일 또는 비밀번호가 잘못되었습니다.");
+            bindingResult.rejectValue("email", "email.notFound", "등록된 이메일이 없습니다.");
+            return "login";
+        } catch (InvalidPasswordException e) {
+            log.error("로그인 실패 = {}", e.getMessage(), e);
+            bindingResult.rejectValue("password","password.mismatch", "비밀번호가 일치하지 않습니다.");
+            return "login";
+        } catch (Exception e) {
+            log.error("로그인 실패 = {}", e.getMessage(), e);
+            bindingResult.reject("login.failed", "이메일 또는 비밀번호가 잘못되었습니다.");
             return "login";
         }
     }

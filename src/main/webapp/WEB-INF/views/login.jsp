@@ -22,7 +22,8 @@
     <div class="container">
         <div class="form-container">
             <h2>로그인해서 멍멍이 만나러 가요! 🐾</h2>
-            <form:form modelAttribute="loginReqDto" action="/api/v1/auth/login" method="post">
+            <form:errors path="loginReqDto.*" cssClass="error" element="p"/>
+            <form:form modelAttribute="loginReqDto" action="/api/v1/auth/login" method="post" id="loginForm">
                  <div class="form-group">
                     <form:label path="email" for="login-username">이메일</form:label>
                     <form:input path="email" id="login-username" placeholder="이메일을 입력하세요!" required="true"/>

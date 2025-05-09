@@ -1,7 +1,5 @@
 package com.myproject.petcare.pet_diary.common.exception.filter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.myproject.petcare.pet_diary.common.dto.ResponseDto;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
@@ -9,10 +7,11 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.filter.GenericFilterBean;
+import org.springframework.web.util.UriUtils;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 @Slf4j
 public class FilterExceptionFilter extends GenericFilterBean {
@@ -25,24 +24,12 @@ public class FilterExceptionFilter extends GenericFilterBean {
         try {
             chain.doFilter(request, response);
         } catch (RuntimeException e) {
-            sendErrorResponse(response, e);
+            // JwtAuthenticationFilter에서 처리하지 않은 예외만 로그인 페이지로 리다이렉트
+            log.error("예외 발생, 로그인 페이지로 리다이렉트: URI={}, message={}", request.getRequestURI(), e.getMessage(), e);
+            // 리다이렉트 URL 생성, returnUrl 인코딩
+            String redirectUrl = "/api/v1/auth/login?error=unauthorized&returnUrl=" +
+                    UriUtils.encode(request.getRequestURI(), StandardCharsets.UTF_8);
+            response.sendRedirect(redirectUrl);
         }
-    }
-
-    private void sendErrorResponse(HttpServletResponse response, RuntimeException e) {
-
-        log.error("[exceptionHandler] ex", e);
-        ResponseDto<HttpStatus> httpStatusResponseDto = new ResponseDto<>(false, e.getMessage());
-
-        response.setStatus(HttpStatus.UNAUTHORIZED.value());
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        try {
-            String json = new ObjectMapper().writeValueAsString(httpStatusResponseDto);
-            response.getWriter().write(json);
-        }catch (IOException error){
-            log.error(error.getMessage());
-        }
-
     }
 }

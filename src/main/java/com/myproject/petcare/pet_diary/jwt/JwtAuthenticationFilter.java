@@ -1,6 +1,5 @@
 package com.myproject.petcare.pet_diary.jwt;
 
-import com.myproject.petcare.pet_diary.common.exception.custom_exception.TokenNotFoundException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -13,8 +12,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.util.UriUtils;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             "/static/**",         // 추가 정적 리소스 경로
             "/WEB-INF/**",  // JSP 파일 경로 (직접 접근 방지용)
             "/favicon.ico",
-            "/api/v1/auth/**");
+            "/api/v1/auth/**");  // 인증 관련 엔드포인트
     private final AntPathMatcher pathMatcher = new AntPathMatcher();
 
     public JwtAuthenticationFilter(JwtUtil jwtUtil, CustomUserDetailsService customUserDetailsService) {
@@ -65,15 +66,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // 토큰 유효성 검사
         if (!StringUtils.hasText(token)) {
-            log.info("Access token이 없습니다.");
-            filterChain.doFilter(request, response);
+            log.info("Access token이 없습니다. 로그인 페이지로 리다이렉트: URI={}", request.getRequestURI());
+            // 리다이렉트 URL 생성, returnUrl 인코딩으로 XSS 방지
+            String redirectUrl = "/api/v1/auth/login?error=unauthorized&returnUrl=" +
+                    UriUtils.encode(request.getRequestURI(), StandardCharsets.UTF_8);
+            response.sendRedirect(redirectUrl);
             return;
         }
 
         // 토큰 만료 검사
         if (jwtUtil.isExpired(token)) {
-            log.info("토큰이 만료되었습니다.");
-            filterChain.doFilter(request, response);
+            log.info("토큰이 만료되었습니다. 로그인 페이지로 리다이렉트: URI={}", request.getRequestURI());
+            // 리다이렉트 URL 생성, returnUrl 인코딩으로 XSS 방지
+            String redirectUrl = "/api/v1/auth/login?error=unauthorized&returnUrl=" +
+                    UriUtils.encode(request.getRequestURI(), StandardCharsets.UTF_8);
+            response.sendRedirect(redirectUrl);
             return;
         }
 

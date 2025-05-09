@@ -55,20 +55,23 @@
                         <tr>
                             <th>이름</th>
                             <th>종</th>
-                            <th>나이</th>
+                            <th>생일</th>
                             <th>성별</th>
+                            <th>무게</th>
+                            <th>설명</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- 반려견 데이터 소스가 없으므로 주석 처리 -->
-                        <!-- <c:forEach var="petInfo" items="${userInfo.petInfos}">
+                        <c:forEach var="petInfo" items="${userInfo.petInfos}">
                             <tr>
                                 <td>${petInfo.name}</td>
                                 <td>${petInfo.breed}</td>
-                                <td>${petInfo.age}</td>
+                                <td>${petInfo.birthDate}</td>
                                 <td>${petInfo.gender}</td>
+                                <td>${petInfo.weight}</td>
+                                <td>${petInfo.description}</td>
                             </tr>
-                        </c:forEach> -->
+                        </c:forEach>
                     </tbody>
                 </table>
                 <a href="/api/v1/pet/register" class="btn pet-register-btn">새 멍멍이 등록! 🐾</a>

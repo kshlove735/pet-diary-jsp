@@ -10,11 +10,11 @@ import com.myproject.petcare.pet_diary.common.exception.custom_exception.EmailNo
 import com.myproject.petcare.pet_diary.common.exception.custom_exception.InvalidPasswordException;
 import com.myproject.petcare.pet_diary.jwt.JwtUtil;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -22,10 +22,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.UriUtils;
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 @Controller
 @RequestMapping("/api/v1")
@@ -111,6 +112,7 @@ public class AuthController {
     @PostMapping("/auth/login")
     public String login(@ModelAttribute @Validated LoginReqDto loginReqDto,
                         BindingResult bindingResult,
+                        HttpServletRequest request,
                         HttpServletResponse response,
                         RedirectAttributes redirectAttributes) {
 
@@ -127,15 +129,26 @@ public class AuthController {
             response.addCookie(createCookie("refresh", loginResDto.getRefreshToken(), jwtUtil.getRefreshTokenExpTime().intValue() / 1000));
             // 성공 메시지 추가
             redirectAttributes.addFlashAttribute("message", "로그인 성공!");
-            // userinfo 페이지로 리다이렉트
-            return "redirect:/api/v1/user";
+
+            // returnUrl 처리
+            String returnUrl = request.getParameter("returnUrl");
+            String decodedReturnUrl = returnUrl != null ? UriUtils.decode(returnUrl, StandardCharsets.UTF_8) : null;
+
+            // returnUrl 유효성 검증
+            if(isValidReturnUrl(decodedReturnUrl)){
+                log.info("로그인 성공, returnUrl로 리다이렉트 : email = {}, returnUrl = {}", loginReqDto.getEmail(), decodedReturnUrl);
+                return "redirect:" + decodedReturnUrl;
+            }else {
+                log.info("로그인 성공, 기본 경로로 리다이렉트 : email = {}, returnUrl = {}", loginReqDto.getEmail(), decodedReturnUrl);
+                return "redirect:/api/v1/user";
+            }
         } catch (EmailNotFoundException e) {
             log.error("로그인 실패 = {}", e.getMessage(), e);
             bindingResult.rejectValue("email", "email.notFound", "등록된 이메일이 없습니다.");
             return "login";
         } catch (InvalidPasswordException e) {
             log.error("로그인 실패 = {}", e.getMessage(), e);
-            bindingResult.rejectValue("password","password.mismatch", "비밀번호가 일치하지 않습니다.");
+            bindingResult.rejectValue("password", "password.mismatch", "비밀번호가 일치하지 않습니다.");
             return "login";
         } catch (Exception e) {
             log.error("로그인 실패 = {}", e.getMessage(), e);
@@ -159,5 +172,26 @@ public class AuthController {
         cookie.setHttpOnly(true); // JS로 접근 불가, 탈취 위험 감소
         cookie.setSecure("prod".equals(activeProfile)); // HTTPS에서만 전송 보장(개발 환경에서는 secure 비활성화)
         return cookie;
+    }
+
+    // returnUrl 유효성 검증
+    private boolean isValidReturnUrl(String returnUrl) {
+        // returnUrl이 없거나 빈 경우 유효하지 않음
+        if (returnUrl == null || returnUrl.trim().isEmpty()) {
+            return false;
+        }
+        // 로그인 페이지로의 리다이렉트 방지
+        if (returnUrl.startsWith("/api/v1/auth/login")) {
+            return false;
+        }
+        // 애플리케이션 내 경로만 허용 (오픈 리다이렉트 방지)
+        if (!returnUrl.startsWith("/api/v1")) {
+            return false;
+        }
+        // 외부 URL 또는 스크립트 포함 방지
+        if (returnUrl.contains("://") || returnUrl.contains("<") || returnUrl.contains(">")) {
+            return false;
+        }
+        return true;
     }
 }

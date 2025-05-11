@@ -14,6 +14,8 @@ public class UpdateUserReqDto {
             message = "이름은 특수문자를 제외한 2~10자리여야 합니다.") // TODO : message 처리
     private String name;
 
-    @NotBlank
+    @NotBlank(message = "전화번호를 입력해주세요.")
+    @Pattern(regexp = "^01[0-1,6-9]-?\\d{3,4}-?\\d{4}$",
+            message = "유효한 전화번호 형식을 입력해주세요. (예: 010-1234-5678 또는 01012345678)")
     private String phone;
 }

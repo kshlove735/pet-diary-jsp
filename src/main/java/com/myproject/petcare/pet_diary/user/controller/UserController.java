@@ -10,7 +10,6 @@ import com.myproject.petcare.pet_diary.user.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,8 +24,9 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/user")
-    public String getUser(@AuthenticationPrincipal CustomUserDetails customUserDetails,
-                          Model model) {
+    public String getUser(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            Model model) {
         // 유저 정보 조회
         UserInfoResDto userInfoResDto = userService.getUser(customUserDetails);
         // JSP에 렌더링할 데이터 추가
@@ -35,13 +35,14 @@ public class UserController {
     }
 
     @PutMapping("/user")
+    @ResponseBody
     public ResponseDto<UserInfoResDto> updateUser(
             @RequestBody @Validated UpdateUserReqDto updateUserReqDto,
             @AuthenticationPrincipal CustomUserDetails customUserDetails) {
-
         UserInfoResDto userInfoResDto = userService.updateUser(updateUserReqDto, customUserDetails);
 
         return new ResponseDto<>(true, "회원 정보 수정 성공", userInfoResDto);
+
     }
 
     @GetMapping("/user/password")

@@ -41,7 +41,7 @@
                 </div>
                 <div class="form-group">
                     <button type="button" id="editButton" class="btn" onclick="enableEdit()">정보 수정</button>
-                    <button type="button" id="changeButton" class="btn" onclick="submitChanges()">변경</button>
+                    <button type="button" id="changeButton" class="btn" onclick="submitChanges()" style="display:none">변경</button>
                     <button type="button" class="btn" onclick="openPasswordChangePopup()">비밀번호 수정</button>
                     <a href="/api/v1/user/delete" class="btn" onclick="return confirm('정말로 떠나실 건가요? 😢')">회원탈퇴</a>
                 </div>
@@ -123,19 +123,19 @@
                     window.location.reload();
                 } else {
                   // 유효성 검사 오류 표시
-                  if(result.data){
-                     // 이전 오류 메시지 지우기
-                    $('#nameError, #phoneError').text('').removeClass('error');
+                    if(result.data){
+                        // 이전 오류 메시지 지우기
+                        $('#nameError, #phoneError').text('').removeClass('error');
 
-                    if(result.data.name){
-                        $('#nameError').text(result.data.name).addClass('error');
+                        if(result.data.name){
+                            $('#nameError').text(result.data.name).addClass('error');
+                        }
+                        if(result.data.phone){
+                            $('#phoneError').text(result.data.phone).addClass('error');
+                        }
+                    }else {
+                        alert('정보 수정에 실패했습니다 : ' + result.message);
                     }
-                    if(result.data.phone){
-                        $('#phoneError').text(result.data.phone).addClass('error');
-                    }
-                  }else {
-                    alert('정보 수정에 실패했습니다 : ' + result.message);
-                  }
                 }
             } catch (error) {
                 console.error('PUT /api/v1/user 오류:', error);
@@ -143,8 +143,38 @@
             }
         }
 
-        function openPasswordChangePopup() {
-            window.open('/api/v1/user/password/change', 'passwordChange', 'width=400,height=500,scrollbars=no,resizable=no');
+        async function openPasswordChangePopup() {
+            // 인증 상태 확인
+            try {
+                const response = await fetch('/api/v1/user/password/verify-auth', {
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    credentials: 'include'
+                });
+
+                const result = await response.json();
+                console.log('인증 확인 응답:', result);
+
+                if (result.success) {
+                    // 팝업 창 크기
+                    const width = 800;
+                    const height = 600;
+                    // 화면 중앙에 위치 계산
+                    const left = (screen.availWidth - width) / 2 + (window.screenX || window.screenLeft || 0);
+                    const top = (screen.availHeight - height) / 2 + (window.screenY || window.screenTop || 0);
+                    window.open('/api/v1/user/password', 'passwordChange', 
+                        `width=${width},height=${height},left=${left},top=${top},scrollbars=no,resizable=no`);
+                } else {
+                    alert('세션이 만료되었습니다. 다시 로그인해주세요.');
+                    window.location.href = '/api/v1/auth/login';
+                }
+            } catch (error) {
+                console.error('인증 확인 오류:', error);
+                alert('세션 확인 중 오류가 발생했습니다. 다시 로그인해주세요.');
+                window.location.href = '/api/v1/auth/login';
+            }
         }
     </script>
 </body>

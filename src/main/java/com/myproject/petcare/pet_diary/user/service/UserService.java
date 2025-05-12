@@ -10,6 +10,7 @@ import com.myproject.petcare.pet_diary.user.dto.UserInfoResDto;
 import com.myproject.petcare.pet_diary.user.entity.User;
 import com.myproject.petcare.pet_diary.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class UserService {
 
     private final UserRepository userRepository;

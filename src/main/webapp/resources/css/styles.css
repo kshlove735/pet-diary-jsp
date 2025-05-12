@@ -131,6 +131,18 @@ body {
     cursor: not-allowed;
 }
 
+/* 추가: 비밀번호 변경 페이지의 변경 버튼 스타일 */
+
+#submitBtn.full-width {
+    width: 100%;
+    padding: 10px;
+    font-size: 1em;
+    margin: 0;
+    box-sizing: border-box;
+    border: 2px solid #ffd1dc;
+    border-radius: 10px;
+}
+
 /* 추가: 비밀번호 토글 버튼 스타일 */
 .toggle-password {
     background: #ffd1dc;
@@ -160,7 +172,8 @@ body {
 }
 
 /* 에러 및 성공 메시지 */
-#emailError, #passwordCheckError, #phoneError {
+#emailError, #passwordCheckError, #phoneError,
+#currentPasswordError, #changedPasswordError, #changedPasswordCheckError {
     margin-top: 8px;
     font-size: 0.9em;
     position: relative;
@@ -221,9 +234,9 @@ th {
 
 /* 팝업 창 스타일 (passwordChange.jsp) */
 .popup {
-    padding: 20px;
+    padding: 30px;
     background-color: #fff;
-    max-width: 400px;
+    max-width: 700px;
     margin: 0 auto;
     border-radius: 15px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
@@ -235,16 +248,26 @@ th {
     text-align: center;
     font-size: 1.8em;
     margin-top: 0;
+    margin-bottom: 20px;
 }
 
 /* 추가: 반응형 디자인 */
-@media (max-width: 600px) {
-    .form-group input, .form-group select {
+@media (max-width: 800px) {
+    .form-group input, .form-group select, #submitBtn.full-width {
         font-size: 0.9em;
         padding: 8px;
     }
     .form-group input[type="submit"], .btn {
         padding: 10px 20px;
         font-size: 1em;
+    }
+    .popup {
+        max-width: 90%;
+        padding: 20px;
+    }
+
+    .popup h2 {
+        font-size: 1.5em;
+        margin-bottom: 15px;
     }
 }

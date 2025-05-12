@@ -10,6 +10,7 @@ import com.myproject.petcare.pet_diary.user.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
+@Slf4j
 public class UserController {
 
     private final UserService userService;
@@ -45,7 +47,7 @@ public class UserController {
 
     }
 
-    @GetMapping("/user/password")
+    @GetMapping("/user/password/verify")
     public ResponseDto checkPassword(
             @RequestBody @Validated CheckPasswordReqDto checkPasswordReqDto,
             @AuthenticationPrincipal CustomUserDetails customUserDetails) {
@@ -56,13 +58,29 @@ public class UserController {
 
     }
 
+    @GetMapping("/user/password/verify-auth")
+    @ResponseBody
+    public ResponseDto verifyAuth(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        if (customUserDetails == null) {
+            return new ResponseDto<>(false, "인증이 필요합니다.", null);
+        }
+        return new ResponseDto<>(true, "인증됨", null);
+    }
+
+    @GetMapping("/user/password")
+    public String updatePasswordPage(Model model){
+        model.addAttribute("updatePasswordReqDto", new UpdatePasswordReqDto());
+        return "passwordChange";
+    }
+
     @PutMapping("/user/password")
+    @ResponseBody
     public ResponseDto updatePassword(
             @RequestBody @Validated UpdatePasswordReqDto updatePasswordReqDto,
             @AuthenticationPrincipal CustomUserDetails customUserDetails) {
 
         userService.updatePassword(updatePasswordReqDto, customUserDetails);
-
         return new ResponseDto<>(true, "비밀번호 수정 성공", null);
     }
 

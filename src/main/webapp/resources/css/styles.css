@@ -66,7 +66,7 @@ body {
 
 /* 폼 그룹 스타일 */
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     position: relative;
 }
 
@@ -109,7 +109,7 @@ body {
 }
 
 /* 버튼 스타일 */
-.form-group input[type="submit"], .btn {
+.btn {
     background: #ff6f61;
     color: #fff;
     border: none;
@@ -122,28 +122,26 @@ body {
     display: inline-block;
 }
 
-.form-group input[type="submit"]:hover, .btn:hover {
+.btn:hover {
     background: #ff4d4d;
 }
 
-.form-group input[type="submit"]:disabled {
+.btn:disabled {
     background: #ccc;
     cursor: not-allowed;
 }
 
-/* 추가: 비밀번호 변경 페이지의 변경 버튼 스타일 */
-
+/* 비밀번호 변경 버튼 스타일 */
 #submitBtn.full-width {
     width: 100%;
-    padding: 10px;
-    font-size: 1em;
-    margin: 0;
-    box-sizing: border-box;
+    padding: 8px;
+    font-size: 0.9em;
     border: 2px solid #ffd1dc;
     border-radius: 10px;
+    box-sizing: border-box;
 }
 
-/* 추가: 비밀번호 토글 버튼 스타일 */
+/* 비밀번호 토글 버튼 스타일 */
 .toggle-password {
     background: #ffd1dc;
     color: #ff4d4d;
@@ -167,19 +165,10 @@ body {
 #checkEmailBtn {
     margin-top: 10px;
     width: auto;
-    display: inline-block;
     padding: 8px 15px;
 }
 
 /* 에러 및 성공 메시지 */
-#emailError, #passwordCheckError, #phoneError,
-#currentPasswordError, #changedPasswordError, #changedPasswordCheckError {
-    margin-top: 8px;
-    font-size: 0.9em;
-    position: relative;
-    width: 100%;
-}
-
 .error {
     color: red;
     font-size: 0.9em;
@@ -234,40 +223,77 @@ th {
 
 /* 팝업 창 스타일 (passwordChange.jsp) */
 .popup {
-    padding: 30px;
+    padding: 20px;
     background-color: #fff;
-    max-width: 700px;
+    max-width: 100%;
     margin: 0 auto;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     border: 2px solid #ffd1dc;
+    box-sizing: border-box;
+    height: 100%;
+    overflow: auto;
+}
+
+.popup-content {
+    max-width: 400px;
+    margin: 0 auto;
 }
 
 .popup h2 {
     color: #ff4d4d;
     text-align: center;
-    font-size: 1.8em;
-    margin-top: 0;
-    margin-bottom: 20px;
+    font-size: 1.5em;
+    margin: 0 0 20px 0;
 }
 
-/* 추가: 반응형 디자인 */
+.popup .form-group input {
+    padding: 8px;
+    font-size: 0.9em;
+}
+
+/* 반응형 디자인 */
 @media (max-width: 800px) {
-    .form-group input, .form-group select, #submitBtn.full-width {
-        font-size: 0.9em;
-        padding: 8px;
+    .container {
+        width: 90%;
     }
-    .form-group input[type="submit"], .btn {
+
+    .form-container, .info-container {
+        padding: 15px;
+    }
+
+    .form-group input, .form-group select {
+        padding: 8px;
+        font-size: 0.9em;
+    }
+
+    .btn {
         padding: 10px 20px;
         font-size: 1em;
     }
+}
+
+@media (max-width: 600px) {
     .popup {
-        max-width: 90%;
-        padding: 20px;
+        padding: 15px;
+    }
+
+    .popup-content {
+        max-width: 100%;
     }
 
     .popup h2 {
-        font-size: 1.5em;
+        font-size: 1.3em;
         margin-bottom: 15px;
+    }
+
+    .popup .form-group input {
+        font-size: 0.85em;
+        padding: 7px;
+    }
+
+    #submitBtn.full-width {
+        font-size: 0.85em;
+        padding: 7px;
     }
 }

@@ -159,13 +159,23 @@
 
                 if (result.success) {
                     // 팝업 창 크기
-                    const width = 800;
-                    const height = 600;
+                    const width = 500;
+                    const height = 400;
                     // 화면 중앙에 위치 계산
-                    const left = (screen.availWidth - width) / 2 + (window.screenX || window.screenLeft || 0);
-                    const top = (screen.availHeight - height) / 2 + (window.screenY || window.screenTop || 0);
+                    // const left = (window.screen.width - width) / 2;
+                    // const top = (window.screen.height - height) / 2;
+
+                    // 현재 창의 위치와 크기를 기준으로 팝업 창 중앙 정렬
+                    const windowWidth = window.outerWidth || 1920; // 현재 창 너비
+                    const windowHeight = window.outerHeight || 1080; // 현재 창 높이
+                    const windowLeft = window.screenX || window.screenLeft || 0; // 현재 창의 X 좌표
+                    const windowTop = window.screenY || window.screenTop || 0; // 현재 창의 Y 좌표
+                    const left = windowLeft + (windowWidth - width) / 2;
+                    const top = windowTop + (windowHeight - height) / 2;
+
                     window.open('/api/v1/user/password', 'passwordChange', 
-                        `width=${width},height=${height},left=${left},top=${top},scrollbars=no,resizable=no`);
+                        'width=' + width + ',height=' + height + ',left=' + left + ',top=' + top +',scrollbars=no,resizable=no');
+                        
                 } else {
                     alert('세션이 만료되었습니다. 다시 로그인해주세요.');
                     window.location.href = '/api/v1/auth/login';

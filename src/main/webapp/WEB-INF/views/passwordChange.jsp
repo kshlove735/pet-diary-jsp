@@ -11,30 +11,34 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body class="popup">
-    <h2>비밀번호 변경</h2>
-    <form id="passwordChangeForm">
-        <div class="form-group">
-            <label for="currentPassword">현재 비밀번호</label>
-            <input type="password" id="currentPassword" name="currentPassword" 
-                placeholder="비밀번호(영문 대 소문자, 숫자, 특수문자 포함 8~16자)를 입력하세요!" required>
-            <div id="currentPasswordError" class="error"></div>
-        </div>
-        <div class="form-group">
-            <label for="changedPassword">변경할 비밀번호</label>
-            <input type="password" id="changedPassword" name="changedPassword" 
-                placeholder="변경할 비밀번호(영문 대 소문자, 숫자, 특수문자 포함 8~16자)를 입력하세요!" required>
-            <div id="changedPasswordError" class="error"></div>
-        </div>
-        <div class="form-group">
-            <label for="changedPasswordCheck">변경할 비밀번호 확인</label>
-            <input type="password" id="changedPasswordCheck" name="changedPasswordCheck" 
-                placeholder="비밀번호를 재입력하세요!" required>
-            <div id="changedPasswordCheckError" class="error"></div>
-        </div>
-        <div class="form-group">
-            <button type="button" id="submitBtn" class="btn full-width" onclick="submitPasswordChange()">변경</button>
-        </div>
-    </form>
+    <div class="popup-content">
+        <h2>비밀번호 변경</h2>
+        <form id="passwordChangeForm">
+            <div class="form-group">
+                <label for="currentPassword">현재 비밀번호</label>
+                <input type="password" id="currentPassword" name="currentPassword" 
+                    placeholder="비밀번호(영문 대 소문자, 숫자, 특수문자 포함 8~16자)를 입력하세요!" required>
+                <div id="currentPasswordError" class="error"></div>
+            </div>
+            <div class="form-group">
+                <label for="changedPassword">변경할 비밀번호</label>
+                <input type="password" id="changedPassword" name="changedPassword" 
+                    placeholder="변경할 비밀번호(영문 대 소문자, 숫자, 특수문자 포함 8~16자)를 입력하세요!" required>
+                <div id="changedPasswordError" class="error"></div>
+            </div>
+            <div class="form-group">
+                <label for="changedPasswordCheck">변경할 비밀번호 확인</label>
+                <input type="password" id="changedPasswordCheck" name="changedPasswordCheck" 
+                    placeholder="비밀번호를 재입력하세요!" required>
+                <div id="changedPasswordCheckError" class="error"></div>
+            </div>
+            <div class="form-group">
+                <button type="button" id="submitBtn" class="btn full-width" onclick="submitPasswordChange()">변경</button>
+            </div>
+        </form>
+    </div>
+
+    
 
     <script>
         $(document).ready(function() {

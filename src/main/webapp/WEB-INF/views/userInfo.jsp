@@ -43,7 +43,7 @@
                     <button type="button" id="editButton" class="btn" onclick="enableEdit()">정보 수정</button>
                     <button type="button" id="changeButton" class="btn" onclick="submitChanges()" style="display:none">변경</button>
                     <button type="button" class="btn" onclick="openPasswordChangePopup()">비밀번호 수정</button>
-                    <a href="/api/v1/user/delete" class="btn" onclick="return confirm('정말로 떠나실 건가요? 😢')">회원탈퇴</a>
+                    <button type="button" class="btn" onclick="confirmDelete()">회원 탈퇴</button>
                 </div>
             </form>
 
@@ -122,11 +122,11 @@
                     alert('정보가 성공적으로 수정되었습니다!');
                     window.location.reload();
                 } else {
-                  // 유효성 검사 오류 표시
+                    // 이전 오류 메시지 지우기
+                    $('#nameError, #phoneError').text('').removeClass('error');
+                    
+                    // 유효성 검사 오류 표시
                     if(result.data){
-                        // 이전 오류 메시지 지우기
-                        $('#nameError, #phoneError').text('').removeClass('error');
-
                         if(result.data.name){
                             $('#nameError').text(result.data.name).addClass('error');
                         }
@@ -175,6 +175,38 @@
                 alert('세션 확인 중 오류가 발생했습니다. 다시 로그인해주세요.');
                 window.location.href = '/api/v1/auth/login';
             }
+        }
+
+        function confirmDelete() {
+            if (window.confirm('정말로 회원 탈퇴하시겠습니까? 모든 데이터가 삭제됩니다.')) {
+                submitDelete();
+            }
+        }       
+
+        async function submitDelete() {
+            try{
+                const response = await fetch('/api/v1/user', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    credentials: 'include' //쿠키 포함
+                });
+
+                const result = await response.json();
+                console.log('응답:', result);
+                if (result.success) {
+                    alert('회원 탈퇴가 완료되었습니다.');
+                    window.location.href = '/api/v1/auth/login';
+                } else {
+                    alert('회원 탈퇴에 실패하였습니다. : ' + result.message);
+                }
+            }catch(error){
+                console.error('회원 탈퇴 오류:', error);
+                alert('회원 탈퇴 중 오류가 발생했습니다.');
+            }
+            
         }
     </script>
 </body>

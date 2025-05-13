@@ -99,6 +99,7 @@ public class UserController {
     }
 
     @DeleteMapping("/user")
+    @ResponseBody
     public ResponseDto deleteUser(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
 
         userService.deleteUser(customUserDetails);

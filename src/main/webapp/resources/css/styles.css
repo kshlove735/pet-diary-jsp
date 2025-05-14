@@ -77,7 +77,7 @@ body {
     margin-bottom: 8px;
 }
 
-.form-group input, .form-group select {
+.form-group input, .form-group select, .form-group textarea {
     width: 100%;
     padding: 10px;
     border: 2px solid #ffd1dc;
@@ -88,24 +88,30 @@ body {
     transition: border-color 0.3s;
 }
 
-.form-group input:focus {
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
     outline: none;
     border-color: #ff6f61;
 }
 
-.form-group input:invalid:not(:placeholder-shown) {
+.form-group input:invalid:not(:placeholder-shown), .form-group select:invalid:not(:placeholder-shown), .form-group textarea:invalid:not(:placeholder-shown) {
     border-color: red;
 }
 
-.form-group input:valid:not(:placeholder-shown) {
+.form-group input:valid:not(:placeholder-shown), .form-group select:valid:not(:placeholder-shown), .form-group textarea:valid:not(:placeholder-shown) {
     border-color: green;
 }
 
 /* 추가: 비활성화된 입력 필드 스타일 */
-.form-group input[disabled] {
+.form-group input[disabled], .form-group select[disabled], .form-group textarea[disabled] {
     background-color: #f0f0f0;
     cursor: not-allowed;
     border-color: #ccc;
+}
+
+/* 추가: textarea 기본 높이 및 크기 조정 가능 */
+.form-group textarea {
+    height: 100px; /* 기본 높이 설정 */
+    resize: vertical; /* 세로 크기 조정만 허용 */
 }
 
 /* 버튼 스타일 */
@@ -118,9 +124,8 @@ body {
     border-radius: 12px;
     font-size: 1.1em;
     transition: background 0.3s;
-    margin: 5px; /* 다른 버튼의 기본 여백 */
+    margin: 5px;
     display: inline-block;
-    /* 브라우저 기본 스타일 초기화 */
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -135,59 +140,55 @@ body {
     cursor: not-allowed;
 }
 
-/* 수정: 회원가입 버튼 스타일, .form-group input과 크기/글씨 크기 일치, .btn의 색상 유지 */
+/* 회원가입 버튼 스타일 */
 #submitBtn.full-width {
     width: 100%;
-    padding: 10px; /* .form-group input의 padding: 10px과 동일 */
-    font-size: 1em; /* .form-group input의 font-size: 1em과 동일 */
+    padding: 10px;
+    font-size: 1em;
     border-radius: 10px;
     box-sizing: border-box;
-    background: #ff6f61; /* .btn과 동일한 배경색 */
-    color: #fff; /* .btn과 동일한 텍스트 색상 */
-    border: none; /* .btn과 동일, 입력 필드의 border는 색상 일치를 위해 제외 */
-    transition: background 0.3s; /* .btn과 동일한 전환 효과 */
-    margin: 0; /* 수정: .btn의 margin: 5px 제거, 다른 input 태그와 여백 일치 */
-    /* 브라우저 기본 스타일 초기화 */
+    background: #ff6f61;
+    color: #fff;
+    border: none;
+    transition: background 0.3s;
+    margin: 0;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
 }
 
-/* 회원가입 버튼 호버 스타일 */
 #submitBtn.full-width:hover {
-    background: #ff4d4d; /* .btn과 동일한 호버 색상 */
+    background: #ff4d4d;
 }
 
-/* 회원가입 버튼 비활성화 스타일 */
 #submitBtn.full-width:disabled {
-    background: #ccc; /* .btn:disabled와 동일 */
+    background: #ccc;
     cursor: not-allowed;
 }
 
-/* 로그인 버튼 스타일, userInfo.jsp의 .btn과 색상 일치 */
+/* 로그인 버튼 스타일 */
 #loginButton {
-    background: #ff6f61; /* userInfo.jsp의 .btn 배경색 */
-    color: #fff; /* userInfo.jsp의 .btn 텍스트 색상 */
+    background: #ff6f61;
+    color: #fff;
     border: none;
     padding: 12px 25px;
     cursor: pointer;
     border-radius: 12px;
     font-size: 1.1em;
     transition: background 0.3s;
-    width: 100%; /* 회원가입 버튼과 유사한 너비 */
+    width: 100%;
     box-sizing: border-box;
-    /* 브라우저 기본 스타일 초기화 */
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
 }
 
 #loginButton:hover {
-    background: #ff4d4d; /* userInfo.jsp의 .btn 호버 색상 */
+    background: #ff4d4d;
 }
 
 #loginButton:disabled {
-    background: #ccc; /* .btn:disabled와 일치 */
+    background: #ccc;
     cursor: not-allowed;
 }
 
@@ -271,7 +272,7 @@ th {
     margin-top: 30px;
 }
 
-/* 팝업 창 스타일 (passwordChange.jsp) */
+/* 팝업 창 스타일 */
 .popup {
     padding: 20px;
     background-color: #fff;
@@ -297,7 +298,7 @@ th {
     margin: 0 0 20px 0;
 }
 
-.popup .form-group input {
+.popup .form-group input, .popup .form-group textarea {
     padding: 8px;
     font-size: 0.9em;
 }
@@ -312,9 +313,9 @@ th {
         padding: 15px;
     }
 
-    .form-group input, .form-group select {
-        padding: 8px; /* 반응형: 입력 필드 padding 조정 */
-        font-size: 0.9em; /* 반응형: 입력 필드 글씨 크기 조정 */
+    .form-group input, .form-group select, .form-group textarea {
+        padding: 8px;
+        font-size: 0.9em;
     }
 
     .btn {
@@ -322,11 +323,10 @@ th {
         font-size: 1em;
     }
 
-    /* 수정: 반응형에서 #submitBtn.full-width의 padding과 font-size 조정 */
     #submitBtn.full-width {
-        padding: 8px; /* .form-group input과 동일 */
-        font-size: 0.9em; /* .form-group input과 동일 */
-        margin: 0; /* 수정: 반응형에서도 margin 제거 유지 */
+        padding: 8px;
+        font-size: 0.9em;
+        margin: 0;
     }
 }
 
@@ -344,15 +344,14 @@ th {
         margin-bottom: 15px;
     }
 
-    .popup .form-group input {
+    .popup .form-group input, .popup .form-group textarea {
         font-size: 0.85em;
         padding: 7px;
     }
 
-    /* 수정: 반응형에서 #submitBtn.full-width의 padding과 font-size 조정 */
     #submitBtn.full-width {
-        font-size: 0.85em; /* .form-group input과 유사 */
-        padding: 7px; /* .form-group input과 동일 */
-        margin: 0; /* 수정: 반응형에서도 margin 제거 유지 */
+        font-size: 0.85em;
+        padding: 7px;
+        margin: 0;
     }
 }

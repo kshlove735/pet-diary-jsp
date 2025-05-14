@@ -30,9 +30,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             "/",
             "/resources/**",      // 정적 리소스 (CSS, JS, 이미지 등)
             "/static/**",         // 추가 정적 리소스 경로
-            "/WEB-INF/**",  // JSP 파일 경로 (직접 접근 방지용)
+            "/WEB-INF/**",        // JSP 파일 경로 (직접 접근 방지용)
             "/favicon.ico",
-            "/api/v1/auth/**");  // 인증 관련 엔드포인트
+            "/api/v1/auth/**",    // 인증 관련 엔드포인트
+            "/auth/**");
     private final AntPathMatcher pathMatcher = new AntPathMatcher();
 
     public JwtAuthenticationFilter(JwtUtil jwtUtil, CustomUserDetailsService customUserDetailsService) {
@@ -68,7 +69,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (!StringUtils.hasText(token)) {
             log.info("Access token이 없습니다. 로그인 페이지로 리다이렉트: URI={}", request.getRequestURI());
             // 리다이렉트 URL 생성, returnUrl 인코딩으로 XSS 방지
-            String redirectUrl = "/api/v1/auth/login?error=unauthorized&returnUrl=" +
+            String redirectUrl = "/auth/login?error=unauthorized&returnUrl=" +
                     UriUtils.encode(request.getRequestURI(), StandardCharsets.UTF_8);
             response.sendRedirect(redirectUrl);
             return;
@@ -78,7 +79,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (jwtUtil.isExpired(token)) {
             log.info("토큰이 만료되었습니다. 로그인 페이지로 리다이렉트: URI={}", request.getRequestURI());
             // 리다이렉트 URL 생성, returnUrl 인코딩으로 XSS 방지
-            String redirectUrl = "/api/v1/auth/login?error=unauthorized&returnUrl=" +
+            String redirectUrl = "/auth/login?error=unauthorized&returnUrl=" +
                     UriUtils.encode(request.getRequestURI(), StandardCharsets.UTF_8);
             response.sendRedirect(redirectUrl);
             return;

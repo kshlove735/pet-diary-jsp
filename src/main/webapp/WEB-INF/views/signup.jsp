@@ -12,35 +12,122 @@
     <link rel="stylesheet" href="/resources/css/styles.css">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <div class="header">
+        <h1>PetCare 🐶🐾</h1>
+    </div>
+    <div class="nav">
+        <a href="/auth/signup">회원가입</a>
+        <a href="/auth/login">로그인</a>
+        <a href="/user">유저 정보</a>
+    </div>
+    <div class="container">
+        <div class="form-container">
+            <h2>가입하고 멍멍이와 함께해요! 🐕</h2>
+            <c:if test="${not empty message}">
+                <p class="success">${message}</p>
+            </c:if>
+            <c:if test="${not empty error}">
+                <p class="error">${error}</p>
+            </c:if>
+            <form:form modelAttribute="signupReqDto" action="/auth/signup" method="post" id="signupForm">
+                <form:hidden path="emailChecked" value="false" />
+                <div class="form-group">
+                    <label for="email">이메일</label>
+                    <form:input type="email" id="email" path="email" placeholder="이메일을 입력하세요!" required="true" />
+                    <form:errors path="email" cssClass="error" />
+                    <div id="emailError" class="error"></div>
+                    <button type="button" id="checkEmailBtn" class="btn" onclick="checkEmailAvailability()">이메일 중복
+                        검사</button>
+
+
+                </div>
+                <div class="form-group">
+                    <label for="password">비밀번호</label>
+                    <form:input type="password" id="password" path="password"
+                        placeholder="비밀번호(영문 대 소문자, 숫자, 특수문자 포함 8~16자)를 입력하세요!" required="true" />
+                    <form:errors path="password" cssClass="error" />
+                </div>
+                <div class="form-group">
+                    <label for="passwordCheck">비밀번호 확인</label>
+                    <form:input type="password" id="passwordCheck" path="passwordCheck" placeholder="비밀번호를 재입력하세요!"
+                        required="true" />
+                    <form:errors path="passwordCheck" cssClass="error" />
+                </div>
+                <div class="form-group">
+                    <label for="name">이름</label>
+                    <form:input type="text" id="name" path="name" placeholder="이름(특수문자를 제외한 2~10자)을 입력하세요!"
+                        required="true" />
+                    <form:errors path="name" cssClass="error" />
+                </div>
+                <div class="form-group">
+                    <label for="phone">전화번호</label>
+                    <form:input type="text" id="phone" path="phone" placeholder="전화번호(예: 010-1234-5678)"
+                        required="true" />
+                    <div id="phoneError" class="error"></div>
+                    <form:errors path="phone" cssClass="error" />
+                </div>
+                <div class="form-group">
+                    <input type="submit" id="submitBtn" class="btn full-width" value="가입하기" disabled="true">
+                </div>
+            </form:form>
+        </div>
+    </div>
     <script>
+        let isEmailChecked = false; // 이메일 중복 검사 여부 플래그
+
         $(document).ready(function () {
-            let isEmailChecked = false; // 이메일 중복 검사 여부 플래그
 
             // 이메일 중복 검사 버튼 클릭 시
             $("#checkEmailBtn").click(function () {
-                const email = $("#email").val();
+                checkEmailAvailability();
+            });
+
+
+            async function checkEmailAvailability() {
+                // 이전 오류 메시지 지우기
+                $('#emailError').text('').addClass('success').removeClass('error');
+
+                // 유효성 검사(빈칸인지)
+                const email = $('#email').val();
                 if (!email) {
-                    $("#emailError").text("이메일을 입력해주세요!").removeClass("success").addClass("error");
+                    $('#emailError').text('이메일을 입력해주세요!').removeClass('success').addClass('error');
                     return;
                 }
-                $.ajax({
-                    url: "/api/v1/auth/check-email",
-                    type: "POST",
-                    data: { email: email },
-                    success: function (response) {
-                        $("#emailError").text(response.message).removeClass(response.available ? "error" : "success").addClass(response.available ? "success" : "error");
-                        isEmailChecked = response.available;
-                        $("#emailChecked").val(isEmailChecked); // hidden 필드 업데이트
-                        $("#submitBtn").prop("disabled", !isEmailChecked); // 버튼 활성화/비활성화
-                    },
-                    error: function () {
-                        $("#emailError").text("이메일 검사 중 오류가 발생했습니다.").removeClass("success").addClass("error");
-                        isEmailChecked = false;
-                        $("#emailChecked").val(false); // hidden 필드 업데이트
-                        $("#submitBtn").prop("disabled", true);
+
+                try {
+                    const response = await fetch('/api/v1/auth/check-email?email=' + encodeURIComponent(email), {
+                        method: 'GET',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        credentials: 'include'
+                    });
+
+                    const result = await response.json();
+
+                    $("#emailError").text(result.message).removeClass(result.success ? "error" : "success").addClass(result.success ? "success" : "error");
+
+                    isEmailChecked = result.success;
+
+                    $("#emailChecked").val(result.success); // hidden 필드 업데이트
+                    $("#submitBtn").prop("disabled", !result.success); // 버튼 활성화/비활성화
+
+                    if (result.data) {
+                        if (result.data.email) {
+                            $('#emailError').text(result.data.email).addClass('error');
+                        }
                     }
-                });
-            });
+
+
+                } catch (error) {
+                    console.error('GET /api/v1/auth/check-email 오류:', error);
+                    alert('이메일 중복 검사 중 오류가 발생했습니다.');
+                    isEmailChecked = false;
+                }
+            }
 
             // 비밀번호 일치 확인
             $("#password, #passwordCheck").on("input", function () {
@@ -74,64 +161,6 @@
             });
         });
     </script>
-
-</head>
-
-<body>
-    <div class="header">
-        <h1>PetCare 🐶🐾</h1>
-    </div>
-    <div class="nav">
-        <a href="/api/v1/auth/signup">회원가입</a>
-        <a href="/api/v1/auth/login">로그인</a>
-        <a href="/api/v1/user">유저 정보</a>
-    </div>
-    <div class="container">
-        <div class="form-container">
-            <h2>가입하고 멍멍이와 함께해요! 🐕</h2>
-            <c:if test="${not empty message}">
-                <p class="success">${message}</p>
-            </c:if>
-            <c:if test="${not empty error}">
-                <p class="error">${error}</p>
-            </c:if>
-            <form:form modelAttribute="signupReqDto" action="/api/v1/auth/signup" method="post" id="signupForm">
-                <form:hidden path="emailChecked" value="${isEmailChecked ? 'true' : 'false'}" />
-                <div class="form-group">
-                    <label for="email">이메일</label>
-                    <form:input type="email" id="email" path="email" placeholder="이메일을 입력하세요!" required="true" />
-                    <button type="button" id="checkEmailBtn" class="btn">이메일 중복 검사</button>
-                    <div id="emailError" class="error"></div>
-                    <form:errors path="email" cssClass="error" />
-                </div>
-                <div class="form-group">
-                    <label for="password">비밀번호</label>
-                    <form:input type="password" id="password" path="password"
-                        placeholder="비밀번호(영문 대 소문자, 숫자, 특수문자 포함 8~16자)를 입력하세요!" required="true" />
-                    <form:errors path="password" cssClass="error" />
-                </div>
-                <div class="form-group">
-                    <label for="passwordCheck">비밀번호 확인</label>
-                    <form:input type="password" id="passwordCheck" path="passwordCheck" placeholder="비밀번호를 재입력하세요!" required="true" />
-                    <form:errors path="passwordCheck" cssClass="error" />
-                </div>
-                <div class="form-group">
-                    <label for="name">이름</label>
-                    <form:input type="text" id="name" path="name" placeholder="이름(특수문자를 제외한 2~10자)을 입력하세요!" required="true" />
-                    <form:errors path="name" cssClass="error" />
-                </div>
-                <div class="form-group">
-                    <label for="phone">전화번호</label>
-                    <form:input type="text" id="phone" path="phone" placeholder="전화번호(예: 010-1234-5678)" required="true" />
-                    <div id="phoneError" class="error"></div>
-                    <form:errors path="phone" cssClass="error" />
-                </div>
-                <div class="form-group">
-                    <input type="submit" id="submitBtn" value="가입하기!" disabled="true">
-                </div>
-            </form:form>
-        </div>
-    </div>
 </body>
 
 </html>

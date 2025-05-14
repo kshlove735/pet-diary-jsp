@@ -27,7 +27,7 @@ public class FilterExceptionFilter extends GenericFilterBean {
             // JwtAuthenticationFilter에서 처리하지 않은 예외만 로그인 페이지로 리다이렉트
             log.error("예외 발생, 로그인 페이지로 리다이렉트: URI={}, message={}", request.getRequestURI(), e.getMessage(), e);
             // 리다이렉트 URL 생성, returnUrl 인코딩
-            String redirectUrl = "/api/v1/auth/login?error=unauthorized&returnUrl=" +
+            String redirectUrl = "/auth/login?error=unauthorized&returnUrl=" +
                     UriUtils.encode(request.getRequestURI(), StandardCharsets.UTF_8);
             response.sendRedirect(redirectUrl);
         }

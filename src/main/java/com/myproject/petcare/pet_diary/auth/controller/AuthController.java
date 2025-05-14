@@ -1,197 +1,45 @@
 package com.myproject.petcare.pet_diary.auth.controller;
 
-import com.myproject.petcare.pet_diary.auth.dto.LoginReqDto;
-import com.myproject.petcare.pet_diary.auth.dto.LoginResDto;
-import com.myproject.petcare.pet_diary.auth.dto.SignupReqDto;
 import com.myproject.petcare.pet_diary.auth.service.AuthService;
 import com.myproject.petcare.pet_diary.common.dto.ResponseDto;
-import com.myproject.petcare.pet_diary.common.exception.custom_exception.EmailDuplicationException;
-import com.myproject.petcare.pet_diary.common.exception.custom_exception.EmailNotFoundException;
-import com.myproject.petcare.pet_diary.common.exception.custom_exception.InvalidPasswordException;
+import com.myproject.petcare.pet_diary.common.utils.CookieUtils;
 import com.myproject.petcare.pet_diary.jwt.JwtUtil;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.util.UriUtils;
 
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
-
-@Controller
+@RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
 @Slf4j
+@Validated
 public class AuthController {
 
     private final AuthService authService;
     private final JwtUtil jwtUtil;
+    private final CookieUtils cookieUtils;
 
-    @Value("${spring.profiles.active:dev}") // 프로파일에 따라 secure 설정 동적 처리
-    private String activeProfile;
+    @GetMapping("/auth/check-email")
+    public ResponseDto checkEmail(
+            @RequestParam
+            @Email(message = "유효한 이메일 형식이 아닙니다.")
+            @NotBlank(message = "이메일을 입력해주세요.")
+            String email) {
 
-    @PostMapping("/auth/check-email")
-    @ResponseBody
-    public Map<String, Object> checkEmail(@RequestParam String email) {
-
-        // 입력 유효성 검사
-        Map<String, Object> response = new HashMap<>();
-        if (!StringUtils.hasText(email)) {
-            response.put("available", false);
-            response.put("message", "이메일을 입력해주세요.");
-            return response;
-        }
         boolean isAvailable = !authService.isEmailTaken(email);
-        response.put("available", isAvailable);
-        response.put("message", isAvailable ? "사용 가능한 이메일입니다." : "이미 사용 중인 이메일입니다.");
-        return response;
-    }
-
-    @GetMapping("/auth/signup")
-    public String signupPage(Model model) {
-        model.addAttribute("signupReqDto", new SignupReqDto());
-        log.info("Model attributes = {}", model.asMap());
-        return "signup";
-    }
-
-    @PostMapping("/auth/signup")
-    public String signup(@ModelAttribute @Validated SignupReqDto signupReqDto,
-                         BindingResult bindingResult,
-                         RedirectAttributes redirectAttributes,
-                         @RequestParam(defaultValue = "false") boolean emailChecked) {
-
-        // 이메일 중복 검사 여부 확인
-        if (!emailChecked) {
-            bindingResult.rejectValue("email", "email.notChecked", "이메일 중복 검사를 진행해주세요.");
-        }
-
-        // 비밀번호 동일 유효성 검사
-        if (!signupReqDto.getPassword().equals(signupReqDto.getPasswordCheck())) {
-            bindingResult.rejectValue("passwordCheck", "password.mismatch", "비밀번호가 일치하지 않습니다.");
-        }
-
-        // 유효성 검사 실패 시 signup.jsp로
-        if (bindingResult.hasErrors()) {
-            log.info("유효성 검사 실패 = {}", bindingResult.getAllErrors());
-            return "signup";
-        }
-
-        // 회원가입 진행
-        try {
-            authService.signup(signupReqDto);
-            redirectAttributes.addFlashAttribute("message", "회원가입이 완료되었습니다!");
-            return "redirect:/api/v1/auth/login";
-        } catch (EmailDuplicationException e) {
-            log.error("이메일 중복 = {}", e.getMessage());
-            bindingResult.rejectValue("email", "email.duplicate", "이미 사용 중인 이메일입니다.");
-            return "signup";
-        } catch (Exception e) {
-            // 회원가입 진행 오류 발생 시
-            log.error("회원 가입 실패 = {}", e.getMessage(), e);
-            redirectAttributes.addFlashAttribute("error", "회원가입에 실패했습니다. 다시 시도해주세요.");
-            return "redirect:/api/v1/auth/signup";
-        }
-    }
-
-    @GetMapping("/auth/login")
-    public String loginPage(Model model) {
-        model.addAttribute("loginReqDto", new LoginReqDto());
-        return "login";
-    }
-
-    @PostMapping("/auth/login")
-    public String login(@ModelAttribute @Validated LoginReqDto loginReqDto,
-                        BindingResult bindingResult,
-                        HttpServletRequest request,
-                        HttpServletResponse response,
-                        RedirectAttributes redirectAttributes) {
-
-        // 유효성 검사 실패 시 로그인 페이지로
-        if (bindingResult.hasErrors()) {
-            log.info("유효성 검사 실패 = {}", bindingResult.getAllErrors());
-            return "login";
-        }
-        try {
-            // 로그인 처리 및 토근 생성
-            LoginResDto loginResDto = authService.login(loginReqDto);
-            // Access Token과 Refresh Token을 쿠키에 저장
-            response.addCookie(createCookie("access", loginResDto.getAccessToken(), jwtUtil.getAccessTokenExpTime().intValue() / 1000));
-            response.addCookie(createCookie("refresh", loginResDto.getRefreshToken(), jwtUtil.getRefreshTokenExpTime().intValue() / 1000));
-            // 성공 메시지 추가
-            redirectAttributes.addFlashAttribute("message", "로그인 성공!");
-
-            // returnUrl 처리
-            String returnUrl = request.getParameter("returnUrl");
-            String decodedReturnUrl = returnUrl != null ? UriUtils.decode(returnUrl, StandardCharsets.UTF_8) : null;
-
-            // returnUrl 유효성 검증
-            if(isValidReturnUrl(decodedReturnUrl)){
-                log.info("로그인 성공, returnUrl로 리다이렉트 : email = {}, returnUrl = {}", loginReqDto.getEmail(), decodedReturnUrl);
-                return "redirect:" + decodedReturnUrl;
-            }else {
-                log.info("로그인 성공, 기본 경로로 리다이렉트 : email = {}, returnUrl = {}", loginReqDto.getEmail(), decodedReturnUrl);
-                return "redirect:/api/v1/user";
-            }
-        } catch (EmailNotFoundException e) {
-            log.error("로그인 실패 = {}", e.getMessage(), e);
-            bindingResult.rejectValue("email", "email.notFound", "등록된 이메일이 없습니다.");
-            return "login";
-        } catch (InvalidPasswordException e) {
-            log.error("로그인 실패 = {}", e.getMessage(), e);
-            bindingResult.rejectValue("password", "password.mismatch", "비밀번호가 일치하지 않습니다.");
-            return "login";
-        } catch (Exception e) {
-            log.error("로그인 실패 = {}", e.getMessage(), e);
-            bindingResult.reject("login.failed", "이메일 또는 비밀번호가 잘못되었습니다.");
-            return "login";
-        }
+        String message = isAvailable ? "사용 가능한 이메일입니다." : "이미 사용 중인 이메일입니다.";
+        return new ResponseDto<>(isAvailable, message, null);
     }
 
     @PostMapping("/auth/refresh")
     public ResponseDto refresh(@CookieValue("refresh") String refreshToken, HttpServletResponse response) {
         String accessToken = authService.refresh(refreshToken);
-        response.addCookie(createCookie("access", accessToken, jwtUtil.getAccessTokenExpTime().intValue() / 1000));
+        response.addCookie(cookieUtils.createCookie("access", accessToken, jwtUtil.getAccessTokenExpTime().intValue() / 1000));
 
         return new ResponseDto<>(true, "Access token 재생성 성공", null);
-    }
-
-    private Cookie createCookie(String key, String value, int maxAge) {
-        Cookie cookie = new Cookie(key, value);
-        cookie.setPath("/");
-        cookie.setMaxAge(maxAge);
-        cookie.setHttpOnly(true); // JS로 접근 불가, 탈취 위험 감소
-        cookie.setSecure("prod".equals(activeProfile)); // HTTPS에서만 전송 보장(개발 환경에서는 secure 비활성화)
-        return cookie;
-    }
-
-    // returnUrl 유효성 검증
-    private boolean isValidReturnUrl(String returnUrl) {
-        // returnUrl이 없거나 빈 경우 유효하지 않음
-        if (returnUrl == null || returnUrl.trim().isEmpty()) {
-            return false;
-        }
-        // 로그인 페이지로의 리다이렉트 방지
-        if (returnUrl.startsWith("/api/v1/auth/login")) {
-            return false;
-        }
-        // 애플리케이션 내 경로만 허용 (오픈 리다이렉트 방지)
-        if (!returnUrl.startsWith("/api/v1")) {
-            return false;
-        }
-        // 외부 URL 또는 스크립트 포함 방지
-        if (returnUrl.contains("://") || returnUrl.contains("<") || returnUrl.contains(">")) {
-            return false;
-        }
-        return true;
     }
 }

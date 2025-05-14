@@ -12,12 +12,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
 @Slf4j
@@ -25,24 +23,12 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/user")
-    public String getUser(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails,
-            Model model) {
-        // 유저 정보 조회
-        UserInfoResDto userInfoResDto = userService.getUser(customUserDetails);
-        // JSP에 렌더링할 데이터 추가
-        model.addAttribute("userInfo", userInfoResDto);
-        return "userInfo";
-    }
-
     @PutMapping("/user")
-    @ResponseBody
     public ResponseDto<UserInfoResDto> updateUser(
             @RequestBody @Validated UpdateUserReqDto updateUserReqDto,
             @AuthenticationPrincipal CustomUserDetails customUserDetails) {
-        UserInfoResDto userInfoResDto = userService.updateUser(updateUserReqDto, customUserDetails);
 
+        UserInfoResDto userInfoResDto = userService.updateUser(updateUserReqDto, customUserDetails);
         return new ResponseDto<>(true, "회원 정보 수정 성공", userInfoResDto);
 
     }
@@ -53,29 +39,23 @@ public class UserController {
             @AuthenticationPrincipal CustomUserDetails customUserDetails) {
 
         boolean isPasswordEqual = userService.checkPassword(checkPasswordReqDto, customUserDetails);
-
         return new ResponseDto<>(true, "현재 비밀번호와 동일합니다.", null);
 
     }
 
-    @GetMapping("/user/password/verify-auth")
-    @ResponseBody
+    @GetMapping("/user/verify-auth")
     public ResponseDto verifyAuth(
             @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+
         if (customUserDetails == null) {
             return new ResponseDto<>(false, "인증이 필요합니다.", null);
         }
         return new ResponseDto<>(true, "인증됨", null);
     }
 
-    @GetMapping("/user/password")
-    public String updatePasswordPage(Model model){
-        model.addAttribute("updatePasswordReqDto", new UpdatePasswordReqDto());
-        return "passwordChange";
-    }
+
 
     @PutMapping("/user/password")
-    @ResponseBody
     public ResponseDto updatePassword(
             @RequestBody @Validated UpdatePasswordReqDto updatePasswordReqDto,
             @AuthenticationPrincipal CustomUserDetails customUserDetails) {
@@ -99,11 +79,9 @@ public class UserController {
     }
 
     @DeleteMapping("/user")
-    @ResponseBody
     public ResponseDto deleteUser(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
 
         userService.deleteUser(customUserDetails);
-
         return new ResponseDto<>(true, "회원 탈퇴 성공", null);
     }
 

@@ -51,7 +51,8 @@ public class SecurityConfig {
                         "/static/**",         // 추가 정적 리소스 경로
                         "/WEB-INF/**",        // JSP 파일 경로 (직접 접근 방지용)
                         "/favicon.ico",
-                        "/api/v1/auth/**"     // 인증 관련 엔드포인트
+                        "/api/v1/auth/**",    // 인증 관련 엔드포인트
+                        "/auth/**"
                 ).permitAll()
                 .anyRequest().authenticated());
 
@@ -66,7 +67,7 @@ public class SecurityConfig {
 
         // 인증 실패 시 로그인 페이지로 리다이렉트
         http.exceptionHandling((exception) -> exception
-                .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/api/v1/auth/login")));
+                .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/auth/login")));
 
         return http.build();
     }

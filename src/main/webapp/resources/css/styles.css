@@ -162,6 +162,15 @@ body {
     background: #777;
 }
 
+/* 삭제 버튼 스타일 */
+.btn.delete {
+    background: #999;
+}
+
+.btn.delete:hover {
+    background: #777;
+}
+
 /* 회원가입/수정 버튼 스타일 */
 #submitBtn.full-width {
     width: 100%;
@@ -189,7 +198,7 @@ body {
 }
 
 /* 취소 버튼 크기 조정 */
-.btn.cancel.full-width {
+.btn.cancel.full-width, .btn.delete.full-width {
     width: 100%;
     padding: 10px;
     font-size: 1em;
@@ -372,7 +381,7 @@ th {
         font-size: 0.85em;
     }
 
-    #submitBtn.full-width, .btn.cancel.full-width {
+    #submitBtn.full-width, .btn.cancel.full-width, .btn.delete.full-width {
         padding: 8px;
         font-size: 0.9em;
     }
@@ -406,7 +415,7 @@ th {
         font-size: 0.8em;
     }
 
-    #submitBtn.full-width, .btn.cancel.full-width {
+    #submitBtn.full-width, .btn.cancel.full-width, .btn.delete.full-width {
         padding: 7px;
         font-size: 0.85em;
     }

@@ -22,6 +22,7 @@
         <a href="/auth/signup">회원가입</a>
         <a href="/auth/login">로그인</a>
         <a href="/user">유저 정보</a>
+        <a href="/diary">멍멍 일기</a>
     </div>
     <div class="container">
         <div class="form-container">

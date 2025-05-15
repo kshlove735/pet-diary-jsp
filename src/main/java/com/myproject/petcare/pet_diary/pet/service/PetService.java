@@ -68,8 +68,11 @@ public class PetService {
         pet.setBirthDate(partialPetReqDto.getBirthDate());
         pet.setGender(partialPetReqDto.getGender());
         pet.setWeight(partialPetReqDto.getWeight());
+
         if(StringUtils.hasText(partialPetReqDto.getDescription())){
             pet.setDescription(partialPetReqDto.getDescription());
+        }else{
+            pet.setDescription(null);
         }
 
         return getPetInfoResDto(pet);

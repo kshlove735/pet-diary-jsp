@@ -4,12 +4,14 @@ import com.myproject.petcare.pet_diary.pet.enums.Gender;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Getter
 @Setter
+@ToString
 public class PartialPetReqDto {
 
     @NotBlank(message = "이름은 필수 입력 항목입니다.")

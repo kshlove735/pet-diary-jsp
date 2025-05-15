@@ -31,14 +31,6 @@ public class PetController {
         return new ResponseDto<>(true, "반려견 등록 성공", petInfoResDto);
     }
 
-    //@GetMapping("/pet/{petId}")
-    //public ResponseDto<PetInfoResDto> getPet(@PathVariable("petId") Long petId) {
-    //
-    //    PetInfoResDto petInfoResDto = petService.getPet(petId);
-    //
-    //    return new ResponseDto<>(true, "반려견 단일 조회 성공", petInfoResDto);
-    //}
-
     @GetMapping("/pet")
     public ResponseDto<List<PetInfoResDto>> getPets(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
 
@@ -52,6 +44,7 @@ public class PetController {
             @PathVariable("petId") Long petId,
             @RequestBody @Validated PartialPetReqDto partialPetReqDto) {
 
+        System.out.println("partialPetReqDto = " + partialPetReqDto);
         PetInfoResDto petInfoResDto = petService.updatePet(petId, partialPetReqDto);
 
         return new ResponseDto<>(true, "반려견 정보 수정 조회 성공", petInfoResDto);

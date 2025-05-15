@@ -55,7 +55,7 @@
             </div>
             <div class="form-group buttons">
                 <button type="button" id="submitBtn" class="btn full-width"
-                    onclick="submitPetUpdate()">수정</button>
+                    onclick="submitPetUpdate('${petInfo.id}')">수정</button>
                 <button type="button" class="btn cancel full-width" onclick="window.close()">취소</button>
             </div>
         </form>
@@ -84,7 +84,7 @@
             });
         });
 
-        function submitPetUpdate() {
+        function submitPetUpdate(petId) {
             const form = document.getElementById('petUpdateForm');
             const data = {
                 name: form.querySelector('#name').value,
@@ -95,13 +95,13 @@
                 description: form.querySelector('#description').value
             };
 
-            console.log('PUT 요청 전송: /api/v1/pet/' + window.petId, '데이터:', data);
+            console.log('PUT 요청 전송: /api/v1/pet/' + petId, '데이터:', data);
 
             // 에러 메시지 초기화
             $('#nameError, #breedError, #birthDateError, #genderError, #weightError, #descriptionError')
                 .text('').removeClass('error');
 
-            fetch('/api/v1/pet/' + window.petId, {
+            fetch('/api/v1/pet/' + petId, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -123,6 +123,8 @@
                         window.close();
                     } else {
                         if (result.data) {
+                            console.log('응답 데이터:', result.data);
+                            console.log('응답 데이터:', result.data.name);
                             if (result.data.name) {
                                 $('#nameError').text(result.data.name).addClass('error');
                             }
@@ -147,7 +149,7 @@
                     }
                 })
                 .catch(error => {
-                    console.error('PUT /api/v1/pet/' + window.petId + ' 오류:', error);
+                    console.error('PUT /api/v1/pet/' + petId + ' 오류:', error);
                     alert('반려견 정보 수정 중 오류가 발생했습니다.');
                 });
         }

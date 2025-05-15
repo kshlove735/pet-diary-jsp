@@ -101,17 +101,17 @@ body {
     border-color: green;
 }
 
-/* 추가: 비활성화된 입력 필드 스타일 */
+/* 비활성화된 입력 필드 스타일 */
 .form-group input[disabled], .form-group select[disabled], .form-group textarea[disabled] {
     background-color: #f0f0f0;
     cursor: not-allowed;
     border-color: #ccc;
 }
 
-/* 추가: textarea 기본 높이 및 크기 조정 가능 */
+/* textarea 기본 높이 및 크기 조정 가능 */
 .form-group textarea {
-    height: 100px; /* 기본 높이 설정 */
-    resize: vertical; /* 세로 크기 조정만 허용 */
+    height: 100px;
+    resize: vertical;
 }
 
 /* 버튼 스타일 */
@@ -140,7 +140,29 @@ body {
     cursor: not-allowed;
 }
 
-/* 회원가입 버튼 스타일 */
+/* 추가: 수정 버튼 스타일 */
+.btn.edit {
+    background: #ffd1dc;
+    color: #ff4d4d;
+    padding: 8px 12px;
+    font-size: 0.9em;
+}
+
+.btn.edit:hover {
+    background: #ff4d4d;
+    color: #fff;
+}
+
+/* 취소 버튼 스타일 */
+.btn.cancel {
+    background: #999;
+}
+
+.btn.cancel:hover {
+    background: #777;
+}
+
+/* 회원가입/수정 버튼 스타일 */
 #submitBtn.full-width {
     width: 100%;
     padding: 10px;
@@ -164,6 +186,28 @@ body {
 #submitBtn.full-width:disabled {
     background: #ccc;
     cursor: not-allowed;
+}
+
+/* 취소 버튼 크기 조정 */
+.btn.cancel.full-width {
+    width: 100%;
+    padding: 10px;
+    font-size: 1em;
+    border-radius: 10px;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+/* 추가: 버튼 컨테이너 (petUpdate.jsp) */
+.form-group.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.form-group.buttons .btn.full-width {
+    width: 48%;
 }
 
 /* 로그인 버튼 스타일 */
@@ -323,10 +367,18 @@ th {
         font-size: 1em;
     }
 
-    #submitBtn.full-width {
+    .btn.edit {
+        padding: 6px 10px;
+        font-size: 0.85em;
+    }
+
+    #submitBtn.full-width, .btn.cancel.full-width {
         padding: 8px;
         font-size: 0.9em;
-        margin: 0;
+    }
+
+    .form-group.buttons .btn.full-width {
+        width: 47%;
     }
 }
 
@@ -349,9 +401,17 @@ th {
         padding: 7px;
     }
 
-    #submitBtn.full-width {
-        font-size: 0.85em;
+    .btn.edit {
+        padding: 5px 8px;
+        font-size: 0.8em;
+    }
+
+    #submitBtn.full-width, .btn.cancel.full-width {
         padding: 7px;
-        margin: 0;
+        font-size: 0.85em;
+    }
+
+    .form-group.buttons .btn.full-width {
+        width: 46%;
     }
 }

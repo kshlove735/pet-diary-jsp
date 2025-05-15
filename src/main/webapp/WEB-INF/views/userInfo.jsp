@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -62,10 +63,11 @@
                             <th>성별</th>
                             <th>무게(kg)</th>
                             <th>설명</th>
+                            <th>수정</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="petInfo" items="${userInfo.petInfos}">
+                        <c:forEach var="petInfo" items="${userInfo.petInfos}" varStatus="status">
                             <tr>
                                 <td>${petInfo.name}</td>
                                 <td>${petInfo.breed}</td>
@@ -77,7 +79,19 @@
                                     <td>여자</td>
                                 </c:if>
                                 <td>${petInfo.weight}</td>
-                                <td>${petInfo.description}</td>
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${fn:length(petInfo.description) > 15}">
+                                            ${fn:substring(petInfo.description, 0, 15)}...
+                                        </c:when>
+                                        <c:otherwise>
+                                            ${petInfo.description}
+                                        </c:otherwise>
+                                    </c:choose>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn edit" onclick="openPetInfoPopup('${petInfo.id}')">수정</button>
+                                </td>
                             </tr>
                         </c:forEach>
                     </tbody>
@@ -220,6 +234,7 @@
 
         }
 
+        // 반려견 등록 팝업 열기
         async function openCreatePetPopup() {
             // 인증 상태 확인
             try {
@@ -259,6 +274,49 @@
                 alert('세션 확인 중 오류가 발생했습니다. 다시 로그인해주세요.');
                 window.location.href = '/auth/login';
             }
+        }
+
+        // 반려견 수정 팝업 열기
+        async function openPetInfoPopup(petId) {
+            // 인증 상태 확인
+            try {
+                const response = await fetch('/api/v1/user/verify-auth', {
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    credentials: 'include'
+                });
+
+                const result = await response.json();
+                console.log('인증 확인 응답:', result);
+
+                if (result.success) {
+                    // 팝업 창 크기
+                    const width = 500;
+                    const height = 400;
+
+                    // 현재 창의 위치와 크기를 기준으로 팝업 창 중앙 정렬
+                    const windowWidth = window.outerWidth || 1920; // 현재 창 너비
+                    const windowHeight = window.outerHeight || 1080; // 현재 창 높이
+                    const windowLeft = window.screenX || window.screenLeft || 0; // 현재 창의 X 좌표
+                    const windowTop = window.screenY || window.screenTop || 0; // 현재 창의 Y 좌표
+                    const left = windowLeft + (windowWidth - width) / 2;
+                    const top = windowTop + (windowHeight - height) / 2;
+
+                    window.open('/pet/'+petId, 'petInfo',
+                        'width=' + width + ',height=' + height + ',left=' + left + ',top=' + top + ',scrollbars=no,resizable=no');
+
+                } else {
+                    alert('세션이 만료되었습니다. 다시 로그인해주세요.');
+                    window.location.href = '/auth/login';
+                }
+            } catch (error) {
+                console.error('인증 확인 오류:', error);
+                alert('세션 확인 중 오류가 발생했습니다. 다시 로그인해주세요.');
+                window.location.href = '/auth/login';
+            }
+            
         }
     </script>
 </body>

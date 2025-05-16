@@ -21,7 +21,7 @@ public class DiaryController {
 
     private final DiaryService diaryService;
 
-    @GetMapping("/diary/{petId}")
+    @GetMapping("/diary")
     public ResponseDto<Page<DiaryInfoWithJoinResDto>> getDiaryList(
             @RequestParam(value = "petId", required = false) List<Long> petIds,
             @RequestParam(value = "dtype", required = false) List<String> dtypes,

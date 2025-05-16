@@ -148,7 +148,7 @@
                 $('#diaryBody').html('<tr><td colspan="7">로딩 중...</td></tr>');
 
                 // TODO : petId 동적 설정, dtype 동적 설정
-                const response = await fetch('/api/v1/diary/1?' + params.toString(), {
+                const response = await fetch('/api/v1/diary?' + params.toString(), {
                     method: 'GET',
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest'

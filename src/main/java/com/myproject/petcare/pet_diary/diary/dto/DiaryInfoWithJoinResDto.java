@@ -14,6 +14,7 @@ public class DiaryInfoWithJoinResDto {
     // diary
     private Long diaryId;
     private Long petId;
+    private String petName;
     private LocalDate date;
     private String dtype;
     private String description;
@@ -47,6 +48,7 @@ public class DiaryInfoWithJoinResDto {
         // diary
         this.diaryId = diary.getId();
         this.petId = diary.getPet().getId();
+        this.petName = diary.getPet().getName();
         this.date = diary.getDate();
         this.dtype = diary.getDtype();
         this.description = diary.getDescription();

@@ -23,11 +23,12 @@ public class DiaryController {
 
     @GetMapping("/diary/{petId}")
     public ResponseDto<Page<DiaryInfoWithJoinResDto>> getDiaryList(
-            @PathVariable("petId") Long petId,
-            @RequestParam(value = "dtype", required = false) List<String> dtype,
+            @RequestParam(value = "petId", required = false) List<Long> petIds,
+            @RequestParam(value = "dtype", required = false) List<String> dtypes,
             Pageable pageable
     ) {
-        Page<DiaryInfoWithJoinResDto> diaryInfoResDtos = diaryService.getDiaryList(petId, dtype, pageable);
+
+        Page<DiaryInfoWithJoinResDto> diaryInfoResDtos = diaryService.getDiaryList(petIds, dtypes, pageable);
         return new ResponseDto<>(true, "일기 리스트 조회 성공", diaryInfoResDtos);
     }
 

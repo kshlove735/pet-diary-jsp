@@ -26,8 +26,8 @@ public class DiaryService {
     private final PetRepository petRepository;
     private final DiaryRepository diaryRepository;
 
-    public Page<DiaryInfoWithJoinResDto> getDiaryList(Long petId, List<String> dtype, Pageable pageable) {
-        Page<Diary> page = diaryRepository.findByPetIdAndDtype(petId, dtype, pageable);
+    public Page<DiaryInfoWithJoinResDto> getDiaryList(List<Long> petIds, List<String> dtypes, Pageable pageable) {
+        Page<Diary> page = diaryRepository.findByPetIdAndDtype(petIds, dtypes, pageable);
 
         Page<DiaryInfoWithJoinResDto> diaryInfoWithJoinResDtos = page.map(d -> new DiaryInfoWithJoinResDto(d));
 

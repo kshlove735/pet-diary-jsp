@@ -37,7 +37,7 @@ public class TestDataInit {
         userRepository.save(user);
 
         Pet pet1 = new Pet();
-        pet1.setName("멍멍이1");
+        pet1.setName("멍멍이");
         pet1.setBreed("포메라니안");
         pet1.setBirthDate(LocalDate.parse("1993-10-20"));
         pet1.setGender(Gender.FEMALE);
@@ -47,7 +47,7 @@ public class TestDataInit {
         petRepository.save(pet1);
 
         Pet pet2 = new Pet();
-        pet2.setName("멍멍이2");
+        pet2.setName("나비");
         pet2.setBreed("포메라니안");
         pet2.setBirthDate(LocalDate.parse("1995-10-20"));
         pet2.setGender(Gender.MALE);
@@ -55,6 +55,7 @@ public class TestDataInit {
         pet2.changeUser(user);
         petRepository.save(pet2);
 
+        // Pet1 (멍멍이) Diary Entries
         Activity activity1 = new Activity(
                 pet1,
                 LocalDate.of(2025, 1, 5),
@@ -104,7 +105,6 @@ public class TestDataInit {
                 new BigDecimal("750.00"),
                 "동네 공원"
         );
-
 
         Behavior behavior1 = new Behavior(
                 pet1,
@@ -271,6 +271,223 @@ public class TestDataInit {
                 30
         );
 
+        // Pet2 (나비) Diary Entries
+        Activity activity6 = new Activity(
+                pet2,
+                LocalDate.of(2025, 1, 8),
+                "해변에서 산책",
+                ActivityType.WALK,
+                35,
+                new BigDecimal("600.00"),
+                "해운대 해변"
+        );
+
+        Activity activity7 = new Activity(
+                pet2,
+                LocalDate.of(2025, 1, 18),
+                "장난감으로 놀이",
+                ActivityType.PLAY,
+                25,
+                new BigDecimal("0.00"),
+                "집 안"
+        );
+
+        Activity activity8 = new Activity(
+                pet2,
+                LocalDate.of(2025, 2, 12),
+                "앉기 훈련",
+                ActivityType.TRAINING,
+                40,
+                new BigDecimal("0.00"),
+                "마당"
+        );
+
+        Activity activity9 = new Activity(
+                pet2,
+                LocalDate.of(2025, 3, 3),
+                "호수에서 수영",
+                ActivityType.SWIM,
+                50,
+                new BigDecimal("200.00"),
+                "일산 호수공원"
+        );
+
+        Activity activity10 = new Activity(
+                pet2,
+                LocalDate.of(2025, 3, 22),
+                "이웃 강아지와 산책",
+                ActivityType.WALK,
+                45,
+                new BigDecimal("800.00"),
+                "아파트 단지"
+        );
+
+        Behavior behavior6 = new Behavior(
+                pet2,
+                LocalDate.of(2025, 1, 6),
+                "혼자 있을 때 낑낑거림",
+                "분리불안",
+                BehaviorIntensity.LOW
+        );
+
+        Behavior behavior7 = new Behavior(
+                pet2,
+                LocalDate.of(2025, 1, 22),
+                "낯선 개에게 짖음",
+                "공격성",
+                BehaviorIntensity.MEDIUM
+        );
+
+        Behavior behavior8 = new Behavior(
+                pet2,
+                LocalDate.of(2025, 2, 8),
+                "신발 물어뜯음",
+                "파괴적 행동",
+                BehaviorIntensity.MEDIUM
+        );
+
+        Behavior behavior9 = new Behavior(
+                pet2,
+                LocalDate.of(2025, 2, 28),
+                "밤에 자꾸 깨어있음",
+                "불안",
+                BehaviorIntensity.HIGH
+        );
+
+        Behavior behavior10 = new Behavior(
+                pet2,
+                LocalDate.of(2025, 3, 18),
+                "사람들과 친화적",
+                "사회성",
+                BehaviorIntensity.LOW
+        );
+
+        Grooming grooming6 = new Grooming(
+                pet2,
+                LocalDate.of(2025, 1, 12),
+                "전문가에게 목욕 맡김",
+                GroomingType.BATH
+        );
+
+        Grooming grooming7 = new Grooming(
+                pet2,
+                LocalDate.of(2025, 1, 28),
+                "여름 스타일로 이발",
+                GroomingType.HAIRCUT
+        );
+
+        Grooming grooming8 = new Grooming(
+                pet2,
+                LocalDate.of(2025, 2, 18),
+                "발톱 깎기",
+                GroomingType.NAIL_TRIM
+        );
+
+        Grooming grooming9 = new Grooming(
+                pet2,
+                LocalDate.of(2025, 3, 8),
+                "귀 청소 완료",
+                GroomingType.EAR_CLEANING
+        );
+
+        Grooming grooming10 = new Grooming(
+                pet2,
+                LocalDate.of(2025, 3, 28),
+                "치아 세척",
+                GroomingType.TEETH_CLEANING
+        );
+
+        Health health6 = new Health(
+                pet2,
+                HealthType.VACCINATION,
+                "광견병 백신 접종",
+                LocalDate.of(2025, 1, 9),
+                LocalDate.of(2026, 1, 9),
+                "평화 동물병원"
+        );
+
+        Health health7 = new Health(
+                pet2,
+                HealthType.CHECKUP,
+                "연간 건강검진",
+                LocalDate.of(2025, 2, 2),
+                null,
+                "안심 동물병원"
+        );
+
+        Health health8 = new Health(
+                pet2,
+                HealthType.SURGERY,
+                "치석 제거 수술",
+                LocalDate.of(2025, 2, 22),
+                null,
+                "미래 동물병원"
+        );
+
+        Health health9 = new Health(
+                pet2,
+                HealthType.MEDICATION,
+                "심장사상충 예방약",
+                LocalDate.of(2025, 3, 12),
+                LocalDate.of(2025, 4, 12),
+                "행복 동물병원"
+        );
+
+        Health health10 = new Health(
+                pet2,
+                HealthType.VACCINATION,
+                "종합 백신 2차 접종",
+                LocalDate.of(2025, 3, 30),
+                LocalDate.of(2026, 3, 30),
+                "평화 동물병원"
+        );
+
+        Meal meal6 = new Meal(
+                pet2,
+                LocalDate.of(2025, 1, 2),
+                "아침 식사 완식",
+                MealType.BREAKFAST,
+                "오리젠",
+                110
+        );
+
+        Meal meal7 = new Meal(
+                pet2,
+                LocalDate.of(2025, 1, 15),
+                "점심 간식 잘 먹음",
+                MealType.SNACK,
+                "덴탈본",
+                25
+        );
+
+        Meal meal8 = new Meal(
+                pet2,
+                LocalDate.of(2025, 2, 3),
+                "저녁 식사 좋아함",
+                MealType.DINNER,
+                "아카나",
+                130
+        );
+
+        Meal meal9 = new Meal(
+                pet2,
+                LocalDate.of(2025, 2, 26),
+                "아침 식사 조금 먹음",
+                MealType.BREAKFAST,
+                "오리젠",
+                95
+        );
+
+        Meal meal10 = new Meal(
+                pet2,
+                LocalDate.of(2025, 3, 20),
+                "저녁 간식 달라고 졸라",
+                MealType.SNACK,
+                "연어 트릿",
+                35
+        );
+
+        // Save Pet1 Diary Entries
         diaryRepository.save(activity1);
         diaryRepository.save(behavior1);
         diaryRepository.save(grooming1);
@@ -301,5 +518,35 @@ public class TestDataInit {
         diaryRepository.save(health5);
         diaryRepository.save(meal5);
 
+        // Save Pet2 Diary Entries
+        diaryRepository.save(activity6);
+        diaryRepository.save(behavior6);
+        diaryRepository.save(grooming6);
+        diaryRepository.save(health6);
+        diaryRepository.save(meal6);
+
+        diaryRepository.save(activity7);
+        diaryRepository.save(behavior7);
+        diaryRepository.save(grooming7);
+        diaryRepository.save(health7);
+        diaryRepository.save(meal7);
+
+        diaryRepository.save(activity8);
+        diaryRepository.save(behavior8);
+        diaryRepository.save(grooming8);
+        diaryRepository.save(health8);
+        diaryRepository.save(meal8);
+
+        diaryRepository.save(activity9);
+        diaryRepository.save(behavior9);
+        diaryRepository.save(grooming9);
+        diaryRepository.save(health9);
+        diaryRepository.save(meal9);
+
+        diaryRepository.save(activity10);
+        diaryRepository.save(behavior10);
+        diaryRepository.save(grooming10);
+        diaryRepository.save(health10);
+        diaryRepository.save(meal10);
     }
 }

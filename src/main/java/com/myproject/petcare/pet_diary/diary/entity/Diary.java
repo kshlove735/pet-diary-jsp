@@ -54,7 +54,7 @@ public class Diary extends BaseEntity {
             case "Activity":
                 return "activity";
             case "Behavior":
-                return "Behavior";
+                return "behavior";
             case "Grooming":
                 return "grooming";
             case "Health":

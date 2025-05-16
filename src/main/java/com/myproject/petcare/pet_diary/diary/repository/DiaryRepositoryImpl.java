@@ -12,6 +12,7 @@ import org.springframework.data.support.PageableExecutionUtils;
 import java.util.List;
 
 import static com.myproject.petcare.pet_diary.diary.entity.QDiary.diary;
+import static com.myproject.petcare.pet_diary.pet.entity.QPet.pet;
 
 public class DiaryRepositoryImpl implements DiaryRepositoryCustom {
 
@@ -22,11 +23,12 @@ public class DiaryRepositoryImpl implements DiaryRepositoryCustom {
     }
 
     @Override
-    public Page<Diary> findByPetIdAndDtype(Long petId, List<String> dtype, Pageable pageable) {
+    public Page<Diary> findByPetIdAndDtype(List<Long> petIds, List<String> dtypes, Pageable pageable) {
         List<Diary> content = queryFactory
                 .select(diary)
                 .from(diary)
-                .where(dtypeIn(dtype))
+                .where(dtypeIn(dtypes))
+                .where(petIdsIn(petIds))
                 .orderBy(diary.date.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -35,13 +37,18 @@ public class DiaryRepositoryImpl implements DiaryRepositoryCustom {
         JPAQuery<Long> countQuery = queryFactory
                 .select(diary.count())
                 .from(diary)
-                .where(dtypeIn(dtype))
+                .where(dtypeIn(dtypes))
+                .where(petIdsIn(petIds))
                 .orderBy(diary.date.desc());
 
         return PageableExecutionUtils.getPage(content, pageable, () -> countQuery.fetchOne());
     }
 
-    private BooleanExpression dtypeIn(List<String> dtype) {
-        return dtype != null ? diary.dtype.in(dtype) : null;
+    private BooleanExpression petIdsIn(List<Long> petIds) {
+        return petIds != null ? pet.id.in(petIds) : null;
+    }
+
+    private BooleanExpression dtypeIn(List<String> dtypes) {
+        return dtypes != null ? diary.dtype.in(dtypes) : null;
     }
 }

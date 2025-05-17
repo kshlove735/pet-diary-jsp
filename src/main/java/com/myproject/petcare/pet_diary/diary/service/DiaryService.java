@@ -34,15 +34,14 @@ public class DiaryService {
         return diaryInfoWithJoinResDtos;
     }
 
-
     @Transactional
-    public HealthInfoResDto createHealth(Long petId, PartialHealthReqDto partialHealthReqDto) {
+    public HealthInfoResDto createHealth(Long petId, DiaryReqDto diaryReqDto) {
         Pet pet = petRepository.findById(petId).orElseThrow(() -> new NotFoundException("해당하는 반려견이 없습니다."));
 
         Health health = new Health(
-                pet, partialHealthReqDto.getHealthType(), partialHealthReqDto.getDescription(),
-                partialHealthReqDto.getDate(), partialHealthReqDto.getNextDueDate(),
-                partialHealthReqDto.getClinic()
+                pet, diaryReqDto.getHealthType(), diaryReqDto.getDescription(),
+                diaryReqDto.getDate(), diaryReqDto.getNextDueDate(),
+                diaryReqDto.getClinic()
         );
 
         diaryRepository.save(health);
@@ -52,13 +51,13 @@ public class DiaryService {
     }
 
     @Transactional
-    public GroomingInfoResDto createGrooming(Long petId, PartialGroomingReqDto partialHealthReqDto) {
+    public GroomingInfoResDto createGrooming(Long petId, DiaryReqDto diaryReqDto) {
         Pet pet = petRepository.findById(petId).orElseThrow(() -> new NotFoundException("해당하는 반려견이 없습니다."));
 
         Grooming grooming = new Grooming(
-                pet, partialHealthReqDto.getDate(),
-                partialHealthReqDto.getDescription(),
-                partialHealthReqDto.getGroomingType()
+                pet, diaryReqDto.getDate(),
+                diaryReqDto.getDescription(),
+                diaryReqDto.getGroomingType()
         );
 
         diaryRepository.save(grooming);
@@ -68,13 +67,13 @@ public class DiaryService {
     }
 
     @Transactional
-    public MealInfoResDto createMeal(Long petId, PartialMealReqDto partialMealReqDto) {
+    public MealInfoResDto createMeal(Long petId, DiaryReqDto diaryReqDto) {
         Pet pet = petRepository.findById(petId).orElseThrow(() -> new NotFoundException("해당하는 반려견이 없습니다."));
 
         Meal meal = new Meal(
-                pet, partialMealReqDto.getDate(),
-                partialMealReqDto.getDescription(), partialMealReqDto.getMealType(),
-                partialMealReqDto.getFoodBrand(), partialMealReqDto.getFoodAmount()
+                pet, diaryReqDto.getDate(),
+                diaryReqDto.getDescription(), diaryReqDto.getMealType(),
+                diaryReqDto.getFoodBrand(), diaryReqDto.getFoodAmount()
         );
 
         diaryRepository.save(meal);
@@ -84,13 +83,13 @@ public class DiaryService {
     }
 
     @Transactional
-    public ActivityInfoResDto createActivity(Long petId, PartialActivityReqDto partialActivityReqDto) {
+    public ActivityInfoResDto createActivity(Long petId, DiaryReqDto diaryReqDto) {
         Pet pet = petRepository.findById(petId).orElseThrow(() -> new NotFoundException("해당하는 반려견이 없습니다."));
 
         Activity activity = new Activity(
-                pet, partialActivityReqDto.getDate(), partialActivityReqDto.getDescription(),
-                partialActivityReqDto.getActivityType(), partialActivityReqDto.getDuration(),
-                partialActivityReqDto.getDistance(), partialActivityReqDto.getLocation()
+                pet, diaryReqDto.getDate(), diaryReqDto.getDescription(),
+                diaryReqDto.getActivityType(), diaryReqDto.getDuration(),
+                diaryReqDto.getDistance(), diaryReqDto.getLocation()
         );
 
         diaryRepository.save(activity);
@@ -100,12 +99,12 @@ public class DiaryService {
     }
 
     @Transactional
-    public BehaviorInfoResDto createBehavior(Long petId, PartialBehaviorReqDto partialMealReqDto) {
+    public BehaviorInfoResDto createBehavior(Long petId, DiaryReqDto diaryReqDto) {
         Pet pet = petRepository.findById(petId).orElseThrow(() -> new NotFoundException("해당하는 반려견이 없습니다."));
 
         Behavior behavior = new Behavior(
-                pet, partialMealReqDto.getDate(), partialMealReqDto.getDescription(),
-                partialMealReqDto.getBehaviorType(), partialMealReqDto.getBehaviorIntensity()
+                pet, diaryReqDto.getDate(), diaryReqDto.getDescription(),
+                diaryReqDto.getBehaviorType(), diaryReqDto.getBehaviorIntensity()
         );
 
         diaryRepository.save(behavior);

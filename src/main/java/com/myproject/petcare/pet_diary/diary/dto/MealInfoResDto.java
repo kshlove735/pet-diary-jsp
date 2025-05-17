@@ -20,7 +20,7 @@ public class MealInfoResDto {
 
     private MealType mealType;
     private String foodBrand;
-    private int foodAmount;
+    private Integer foodAmount;
 
     private LocalDateTime createDate;
     private LocalDateTime updatedDate;

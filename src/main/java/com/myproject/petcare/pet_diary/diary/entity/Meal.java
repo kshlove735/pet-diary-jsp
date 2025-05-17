@@ -29,7 +29,7 @@ public class Meal extends Diary {
     @Comment("급여량(g)")
     private Integer foodAmount;
 
-    public Meal(Pet pet, LocalDate date, String description, MealType mealType, String foodBrand, int foodAmount) {
+    public Meal(Pet pet, LocalDate date, String description, MealType mealType, String foodBrand, Integer foodAmount) {
         super(pet, date, description);
         this.mealType = mealType;
         this.foodBrand = foodBrand;

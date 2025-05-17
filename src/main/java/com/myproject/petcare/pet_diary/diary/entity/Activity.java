@@ -34,7 +34,7 @@ public class Activity extends Diary {
     @Comment("활동 장소")
     private String location;
 
-    public Activity(Pet pet, LocalDate date, String description, ActivityType activityType, int duration, BigDecimal distance, String location) {
+    public Activity(Pet pet, LocalDate date, String description, ActivityType activityType, Integer duration, BigDecimal distance, String location) {
         super(pet, date, description);
         this.activityType = activityType;
         this.duration = duration;

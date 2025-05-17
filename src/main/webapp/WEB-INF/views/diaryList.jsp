@@ -147,7 +147,6 @@
                 const result = await response.json();
                 if (result.success) {
                     const petInfos = result.data;
-                    console.log('petInfos :', petInfos);
 
                     const petIdSelect = $('#petIds');
                     petInfos.forEach(petInfo => {
@@ -191,7 +190,6 @@
                 const result = await response.json();
 
                 console.log('result :', result);
-                console.log('content :', result.data.content);
 
                 if (result.success) {
                     renderDiaries(result.data);

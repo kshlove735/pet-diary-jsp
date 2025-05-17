@@ -13,8 +13,13 @@ public class DiaryViewController {
     private final DiaryService diaryService;
 
     @GetMapping("/diary")
-    public String createPetPage(Model model) {
+    public String getDiaryPage(Model model) {
         return "diaryList";
+    }
+
+    @GetMapping("/diary/new")
+    public String createDiaryPage(Model model){
+        return "createDiary";
     }
 
 }

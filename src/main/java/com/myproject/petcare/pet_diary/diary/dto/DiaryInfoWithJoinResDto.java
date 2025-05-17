@@ -42,7 +42,7 @@ public class DiaryInfoWithJoinResDto {
     // meal
     private MealType mealType;
     private String foodBrand;
-    private int foodAmount;
+    private Integer foodAmount;
 
     public DiaryInfoWithJoinResDto(Diary diary) {
         // diary

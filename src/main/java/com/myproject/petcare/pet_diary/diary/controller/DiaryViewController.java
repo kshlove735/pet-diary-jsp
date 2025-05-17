@@ -14,7 +14,6 @@ public class DiaryViewController {
 
     @GetMapping("/diary")
     public String createPetPage(Model model) {
-        //model.addAttribute("partialPetReqDto", new PartialPetReqDto());
         return "diaryList";
     }
 

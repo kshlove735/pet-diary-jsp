@@ -4,27 +4,28 @@
 
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PetCare - 멍멍 일기 🐾</title>
     <link rel="stylesheet" href="/resources/css/styles.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- 최적화: 최신 jQuery 버전으로 업그레이드 및 보안 속성 추가 -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" 
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" 
+            crossorigin="anonymous"></script>
 </head>
-
 <body>
-    <div class="header">
+    <header class="header">
         <h1>PetCare 🐶🐾</h1>
-    </div>
-    <div class="nav">
+    </header>
+    <nav class="nav">
         <a href="/auth/signup">회원가입</a>
         <a href="/auth/login">로그인</a>
         <a href="/user">유저 정보</a>
         <a href="/diary">멍멍 일기</a>
-    </div>
-    <div class="container">
-        <div class="info-container">
+    </nav>
+    <main class="container">
+        <section class="info-container">
             <h2>멍멍이 일기 📖</h2>
             <c:if test="${not empty message}">
                 <p style="color: green;">${message}</p>
@@ -54,9 +55,9 @@
             </div>
 
             <!-- 일기 목록 -->
-            <div class="diary-section">
+            <section class="diary-section">
                 <h3>일기 목록 🐕</h3>
-                <table id="diaryTable">
+                <table id = "diaryTable">
                     <thead>
                         <tr>
                             <th>반려견</th>
@@ -76,31 +77,66 @@
                     <p>일기가 없습니다.</p>
                 </div>
                 <button type="button" class="btn" onclick="openCreateDiaryPopup()">새 일기 작성! ✍️</button>
-            </div>
+            </section>
 
             <!-- 페이징 -->
             <div class="pagination" id="pagination">
                 <!-- 동적 렌더링 -->
             </div>
-        </div>
-    </div>
+        </section>
+    </main>
 
     <script>
         let currentPage = 0;
         const pageSize = 5;
 
         $(document).ready(function () {
-
             // petId 조회
             fetchPetIds();
             // 초기 일기 조회
             fetchDiaries(0);
         });
 
+        // 최적화: 인증 확인 로직을 재사용 가능한 함수로 통합
+        async function verifyAuth() {
+            try {
+                const response = await fetch('/api/v1/user/verify-auth', {
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    credentials: 'include'
+                });
+                const result = await response.json();
+                if (!result.success) {
+                    alert('세션이 만료되었습니다. 다시 로그인해주세요.');
+                    window.location.href = '/auth/login';
+                    return false;
+                }
+                return true;
+            } catch (error) {
+                console.error('인증 확인 오류:', error);
+                alert('세션 확인 중 오류가 발생했습니다.');
+                return false;
+            }
+        }
+
+        // 최적화: 팝업 창 크기 및 위치 계산을 별도 함수로 분리
+        function openPopup(url, name, width = 500, height = 600) {
+            const windowWidth = window.outerWidth || 1920;
+            const windowHeight = window.outerHeight || 1080;
+            const windowLeft = window.screenX || window.screenLeft || 0;
+            const windowTop = window.screenY || window.screenTop || 0;
+            const left = windowLeft + (windowWidth - width) / 2;
+            const top = windowTop + (windowHeight - height) / 2;
+
+            window.open(url, name,
+                `width=\${width},height=\${height},left=\${left},top=\${top},scrollbars=no,resizable=no`);
+        }
+
         // petId 조회
         async function fetchPetIds() {
             try {
-
                 const response = await fetch('/api/v1/pet', {
                     method: 'GET',
                     headers: {
@@ -111,9 +147,7 @@
                 const result = await response.json();
                 if (result.success) {
                     const petInfos = result.data;
-
                     console.log('petInfos :', petInfos);
-
 
                     const petIdSelect = $('#petIds');
                     petInfos.forEach(petInfo => {
@@ -143,11 +177,10 @@
             petIds.forEach(id => params.append('petId', id));
             dtypes.forEach(type => params.append('dtype', type));
 
-            console.log("path : " + '/api/v1/diary/1?dtype=activity&' + params.toString());
+            console.log("path : " + '/api/v1/diary?' + params.toString());
             try {
                 $('#diaryBody').html('<tr><td colspan="7">로딩 중...</td></tr>');
 
-                // TODO : petId 동적 설정, dtype 동적 설정
                 const response = await fetch('/api/v1/diary?' + params.toString(), {
                     method: 'GET',
                     headers: {
@@ -178,7 +211,7 @@
             }
         }
 
-        // 일기 렌더링
+        // 최적화: 일기 렌더링 로직 간소화 및 가독성 개선
         function renderDiaries(pageData) {
             const diaries = pageData.content;
             const tbody = $('#diaryBody');
@@ -190,26 +223,56 @@
                 return;
             }
 
-            diaries.forEach(diary => {
-                let details = '';
-                let typ = '';
-                if (diary.dtype === 'activity') {
-                    details = `활동 유형 : \${diary.activityType == 'WALK' ? '산책' : diary.activityType == 'PLAY' ? '놀이' : diary.activityType == 'TRAINING' ? '훈련' : diary.activityType == 'SWIM' ? '수영' : ''}, 장소: \${diary.location || ''}, 시간: \${diary.duration || ''}분, 거리: \${diary.distance != null ? diary.distance : ''}km`;
-                    type = '활동';
-                } else if (diary.dtype === 'behavior') {
-                    details = `행동 유형: \${diary.behaviorType || ''}, 강도: \${diary.behaviorIntensity == 'LOW' ? '낮음' : diary.behaviorIntensity == 'MEDIUM' ? '보통' : diary.behaviorIntensity == 'HIGH' ? '높음' : ''}`;
-                    type = '행동';
-                } else if (diary.dtype === 'grooming') {
-                    details = `미용 유형 : \${diary.groomingType == 'BATH' ? '목욕' : diary.groomingType == 'HAIRCUT' ? '이발' : diary.groomingType == 'NAIL_TRIM' ? '발톱 손질' : diary.groomingType == 'EAR_CLEANING' ? '귀 청소' : diary.groomingType == 'TEETH_CLEANING' ? '치아 관리' : ''}`;
-                    type = '미용';
-                } else if (diary.dtype === 'health') {
-                    details = `건강 유형 : \${diary.healthType == 'VACCINATION' ? '예방접종' : diary.healthType == 'CHECKUP' ? '건강검진' : diary.healthType == 'SURGERY' ? '수술' : diary.healthType == 'MEDICATION' ? '투약' : ''}, 병원: \${diary.clinic || ''}, 다음 방문: \${diary.nextDueDate || ''}`;
-                    type = '건강';
-                } else if (diary.dtype === 'meal') {
-                    details = `식사 유형 : \${diary.mealType == 'BREAKFAST' ? '아침' : diary.mealType == 'LUNCH' ? '점심' : diary.mealType == 'DINNER' ? '저녁' : diary.mealType == 'SNACK' ? '간식' : ''}, 브랜드: \${diary.foodBrand || ''}, 양: \${diary.foodAmount || ''}g`;
-                    type = '식사';
+            const typeMap = {
+                activity: {
+                    label: '활동',
+                    details: diary => `활동 유형: \${{
+                        'WALK': '산책',
+                        'PLAY': '놀이',
+                        'TRAINING': '훈련',
+                        'SWIM': '수영'
+                    }[diary.activityType] || ''}, 장소: \${diary.location || ''}, 시간: \${diary.duration || ''}분, 거리: \${diary.distance != null ? diary.distance : ''}km`
+                },
+                behavior: {
+                    label: '행동',
+                    details: diary => `행동 유형: \${diary.behaviorType || ''}, 강도: \${{
+                        'LOW': '낮음',
+                        'MEDIUM': '보통',
+                        'HIGH': '높음'
+                    }[diary.behaviorIntensity] || ''}`
+                },
+                grooming: {
+                    label: '미용',
+                    details: diary => `미용 유형: \${{
+                        'BATH': '목욕',
+                        'HAIRCUT': '이발',
+                        'NAIL_TRIM': '발톱 손질',
+                        'EAR_CLEANING': '귀 청소',
+                        'TEETH_CLEANING': '치아 관리'
+                    }[diary.groomingType] || ''}`
+                },
+                health: {
+                    label: '건강',
+                    details: diary => `건강 유형: \${{
+                        'VACCINATION': '예방접종',
+                        'CHECKUP': '건강검진',
+                        'SURGERY': '수술',
+                        'MEDICATION': '투약'
+                    }[diary.healthType] || ''}, 병원: \${diary.clinic || ''}, 다음 방문: \${diary.nextDueDate || ''}`
+                },
+                meal: {
+                    label: '식사',
+                    details: diary => `식사 유형: \${{
+                        'BREAKFAST': '아침',
+                        'LUNCH': '점심',
+                        'DINNER': '저녁',
+                        'SNACK': '간식'
+                    }[diary.mealType] || ''}, 브랜드: \${diary.foodBrand || ''}, 양: \${diary.foodAmount || ''}g`
                 }
+            };
 
+            diaries.forEach(diary => {
+                const config = typeMap[diary.dtype] || { label: '', details: () => '' };
                 const description = diary.description && diary.description.length > 30
                     ? diary.description.substring(0, 30) + '...'
                     : diary.description || '';
@@ -218,8 +281,8 @@
                     <tr>
                         <td>\${diary.petName || diary.petId}</td>
                         <td>\${diary.date}</td>
-                        <td>\${type}</td>
-                        <td>\${details}</td>
+                        <td>\${config.label}</td>
+                        <td>\${config.details(diary)}</td>
                         <td>\${description}</td>
                         <td><button type="button" class="btn edit" onclick="openDiaryEditPopup(\${diary.diaryId})">수정</button></td>
                         <td><button type="button" class="btn delete" onclick="deleteDiary(\${diary.diaryId})">삭제</button></td>
@@ -259,67 +322,15 @@
 
         // 새 일기 등록 팝업
         async function openCreateDiaryPopup() {
-            try {
-                const response = await fetch('/api/v1/user/verify-auth', {
-                    method: 'GET',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    credentials: 'include'
-                });
-                const result = await response.json();
-                if (result.success) {
-                    const width = 500;
-                    const height = 600;
-                    const windowWidth = window.outerWidth || 1920;
-                    const windowHeight = window.outerHeight || 1080;
-                    const windowLeft = window.screenX || window.screenLeft || 0;
-                    const windowTop = window.screenY || window.screenTop || 0;
-                    const left = windowLeft + (windowWidth - width) / 2;
-                    const top = windowTop + (windowHeight - height) / 2;
-
-                    window.open('/diary/new', 'createDiary',
-                        `width=${width},height=${height},left=${left},top=${top},scrollbars=no,resizable=no`);
-                } else {
-                    alert('세션이 만료되었습니다. 다시 로그인해주세요.');
-                    window.location.href = '/auth/login';
-                }
-            } catch (error) {
-                console.error('인증 확인 오류:', error);
-                alert('세션 확인 중 오류가 발생했습니다.');
+            if (await verifyAuth()) {
+                openPopup('/diary/new', 'createDiary');
             }
         }
 
         // 일기 수정 팝업
         async function openDiaryEditPopup(diaryId) {
-            try {
-                const response = await fetch('/api/v1/user/verify-auth', {
-                    method: 'GET',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    credentials: 'include'
-                });
-                const result = await response.json();
-                if (result.success) {
-                    const width = 500;
-                    const height = 600;
-                    const windowWidth = window.outerWidth || 1920;
-                    const windowHeight = window.outerHeight || 1080;
-                    const windowLeft = window.screenX || window.screenLeft || 0;
-                    const windowTop = window.screenY || window.screenTop || 0;
-                    const left = windowLeft + (windowWidth - width) / 2;
-                    const top = windowTop + (windowHeight - height) / 2;
-
-                    window.open(`/diary/${diaryId}`, 'editDiary',
-                        `width=${width},height=${height},left=${left},top=${top},scrollbars=no,resizable=no`);
-                } else {
-                    alert('세션이 만료되었습니다. 다시 로그인해주세요.');
-                    window.location.href = '/auth/login';
-                }
-            } catch (error) {
-                console.error('인증 확인 오류:', error);
-                alert('세션 확인 중 오류가 발생했습니다.');
+            if (await verifyAuth()) {
+                openPopup(`/diary/\${diaryId}`, 'editDiary');
             }
         }
 
@@ -328,7 +339,7 @@
             if (!confirm('이 일기를 삭제하시겠습니까?')) return;
 
             try {
-                const response = await fetch(`/api/v1/diary/${diaryId}`, {
+                const response = await fetch(`/api/v1/diary/\${diaryId}`, {
                     method: 'DELETE',
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest'
@@ -349,5 +360,4 @@
         }
     </script>
 </body>
-
 </html>

@@ -61,49 +61,31 @@ public class DiaryController {
         }
     }
 
-    @PutMapping("/diary/{diaryId}/health")
-    public ResponseDto<HealthInfoResDto> updateHealth(
-            @PathVariable("diaryId") Long diaryId,
-            @RequestBody @Validated PartialHealthReqDto partialHealthReqDto
+    @PutMapping("/diary/{diaryId}")
+    public ResponseDto updateDiary(
+            @PathVariable("diaryId") @Positive(message = "반려견 ID는 양수여야 합니다.") Long diaryId,
+            @RequestBody @Validated DiaryReqDto diaryReqDto
     ) {
-        HealthInfoResDto healthInfoResDto = diaryService.updateHealth(diaryId, partialHealthReqDto);
-        return new ResponseDto<>(true, "건강 기록 수정 성공", healthInfoResDto);
-    }
 
-    @PutMapping("/diary/{diaryId}/grooming")
-    public ResponseDto<GroomingInfoResDto> updateGrooming(
-            @PathVariable("diaryId") Long diaryId,
-            @RequestBody @Validated PartialGroomingReqDto partialHealthReqDto
-    ) {
-        GroomingInfoResDto groomingInfoResDto = diaryService.updateGrooming(diaryId, partialHealthReqDto);
-        return new ResponseDto<>(true, "미용 기록 수정 성공", groomingInfoResDto);
-    }
-
-    @PutMapping("/diary/{diaryId}/meal")
-    public ResponseDto<MealInfoResDto> updateMeal(
-            @PathVariable("diaryId") Long diaryId,
-            @RequestBody @Validated PartialMealReqDto partialMealReqDto
-    ) {
-        MealInfoResDto mealInfoResDto = diaryService.updateMeal(diaryId, partialMealReqDto);
-        return new ResponseDto<>(true, "식사 기록 수정 성공", mealInfoResDto);
-    }
-
-    @PutMapping("/diary/{diaryId}/activity")
-    public ResponseDto<ActivityInfoResDto> updateActivity(
-            @PathVariable("diaryId") Long diaryId,
-            @RequestBody @Validated PartialActivityReqDto partialActivityReqDto
-    ) {
-        ActivityInfoResDto activityInfoResDto = diaryService.updateActivity(diaryId, partialActivityReqDto);
-        return new ResponseDto<>(true, "운동 기록 수정 성공", activityInfoResDto);
-    }
-
-    @PutMapping("/diary/{diaryId}/behavior")
-    public ResponseDto<BehaviorInfoResDto> updateBehavior(
-            @PathVariable("diaryId") Long diaryId,
-            @RequestBody @Validated PartialBehaviorReqDto partialBehaviorReqDto
-    ) {
-        BehaviorInfoResDto behaviorInfoResDto = diaryService.updateBehavior(diaryId, partialBehaviorReqDto);
-        return new ResponseDto<>(true, "행동 기록 수정 성공", behaviorInfoResDto);
+        switch (diaryReqDto.getDtype()) {
+            case "activity":
+                ActivityInfoResDto activityInfoResDto = diaryService.updateActivity(diaryId, diaryReqDto);
+                return new ResponseDto<>(true, "운동 기록 수정 성공", activityInfoResDto);
+            case "behavior":
+                BehaviorInfoResDto behaviorInfoResDto = diaryService.updateBehavior(diaryId, diaryReqDto);
+                return new ResponseDto<>(true, "행동 기록 수정 성공", behaviorInfoResDto);
+            case "grooming":
+                GroomingInfoResDto groomingInfoResDto = diaryService.updateGrooming(diaryId, diaryReqDto);
+                return new ResponseDto<>(true, "미용 기록 수정 성공", groomingInfoResDto);
+            case "health":
+                HealthInfoResDto healthInfoResDto = diaryService. updateHealth(diaryId, diaryReqDto);
+                return new ResponseDto<>(true, "건강 기록 수정 성공", healthInfoResDto);
+            case "meal":
+                MealInfoResDto mealInfoResDto = diaryService.updateMeal(diaryId, diaryReqDto);
+                return new ResponseDto<>(true, "식사 기록 수정 성공", mealInfoResDto);
+            default:
+                throw new IllegalArgumentException("지원되지 않는 일기 유형입니다: " + diaryReqDto.getDtype());
+        }
     }
 
     @DeleteMapping("/diary/{diaryId}")

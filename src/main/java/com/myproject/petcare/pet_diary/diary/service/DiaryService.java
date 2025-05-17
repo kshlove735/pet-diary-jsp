@@ -114,23 +114,23 @@ public class DiaryService {
     }
 
     @Transactional
-    public HealthInfoResDto updateHealth(Long diaryId, PartialHealthReqDto partialHealthReqDto) {
+    public HealthInfoResDto updateHealth(Long diaryId, DiaryReqDto diaryReqDto) {
         Health health = (Health) diaryRepository.findById(diaryId).orElseThrow(() -> new NotFoundException("해당하는 일기가 없습니다."));
 
-        health.setHealthType(partialHealthReqDto.getHealthType());
+        health.setHealthType(diaryReqDto.getHealthType());
 
-        if (StringUtils.hasText(partialHealthReqDto.getDescription())) {
-            health.setDescription(partialHealthReqDto.getDescription());
+        if (StringUtils.hasText(diaryReqDto.getDescription())) {
+            health.setDescription(diaryReqDto.getDescription());
         }
 
-        health.setDate(partialHealthReqDto.getDate());
+        health.setDate(diaryReqDto.getDate());
 
-        if (partialHealthReqDto.getNextDueDate() != null) {
-            health.setNextDueDate(partialHealthReqDto.getNextDueDate());
+        if (diaryReqDto.getNextDueDate() != null) {
+            health.setNextDueDate(diaryReqDto.getNextDueDate());
         }
 
-        if (StringUtils.hasText(partialHealthReqDto.getClinic())) {
-            health.setClinic(partialHealthReqDto.getClinic());
+        if (StringUtils.hasText(diaryReqDto.getClinic())) {
+            health.setClinic(diaryReqDto.getClinic());
         }
 
         HealthInfoResDto healthInfoResDto = getHealthInfoResDto(health);
@@ -138,14 +138,14 @@ public class DiaryService {
     }
 
     @Transactional
-    public GroomingInfoResDto updateGrooming(Long diaryId, PartialGroomingReqDto partialHealthReqDto) {
+    public GroomingInfoResDto updateGrooming(Long diaryId, DiaryReqDto diaryReqDto) {
         Grooming grooming = (Grooming) diaryRepository.findById(diaryId).orElseThrow(() -> new NotFoundException("해당하는 일기가 없습니다."));
 
-        grooming.setGroomingType(partialHealthReqDto.getGroomingType());
-        grooming.setDate(partialHealthReqDto.getDate());
+        grooming.setGroomingType(diaryReqDto.getGroomingType());
+        grooming.setDate(diaryReqDto.getDate());
 
-        if (StringUtils.hasText(partialHealthReqDto.getDescription())) {
-            grooming.setDescription(partialHealthReqDto.getDescription());
+        if (StringUtils.hasText(diaryReqDto.getDescription())) {
+            grooming.setDescription(diaryReqDto.getDescription());
         }
 
         GroomingInfoResDto groomingInfoResDto = getGroomingInfoResDto(grooming);
@@ -153,23 +153,23 @@ public class DiaryService {
     }
 
     @Transactional
-    public MealInfoResDto updateMeal(Long diaryId, PartialMealReqDto partialMealReqDto) {
+    public MealInfoResDto updateMeal(Long diaryId, DiaryReqDto diaryReqDto) {
         Meal meal = (Meal) diaryRepository.findById(diaryId).orElseThrow(() -> new NotFoundException("해당하는 일기가 없습니다."));
 
-        meal.setMealType(partialMealReqDto.getMealType());
+        meal.setMealType(diaryReqDto.getMealType());
 
-        if (StringUtils.hasText(partialMealReqDto.getFoodBrand())) {
-            meal.setFoodBrand(partialMealReqDto.getFoodBrand());
+        if (StringUtils.hasText(diaryReqDto.getFoodBrand())) {
+            meal.setFoodBrand(diaryReqDto.getFoodBrand());
         }
 
-        if (partialMealReqDto.getFoodAmount() != null) {
-            meal.setFoodAmount(partialMealReqDto.getFoodAmount());
+        if (diaryReqDto.getFoodAmount() != null) {
+            meal.setFoodAmount(diaryReqDto.getFoodAmount());
         }
 
-        meal.setDate(partialMealReqDto.getDate());
+        meal.setDate(diaryReqDto.getDate());
 
-        if (StringUtils.hasText(partialMealReqDto.getDescription())) {
-            meal.setDescription(partialMealReqDto.getDescription());
+        if (StringUtils.hasText(diaryReqDto.getDescription())) {
+            meal.setDescription(diaryReqDto.getDescription());
         }
 
         MealInfoResDto mealInfoResDto = getMealInfoResDto(meal);
@@ -177,28 +177,28 @@ public class DiaryService {
     }
 
     @Transactional
-    public ActivityInfoResDto updateActivity(Long diaryId, PartialActivityReqDto partialActivityReqDto) {
+    public ActivityInfoResDto updateActivity(Long diaryId, DiaryReqDto diaryReqDto) {
         Activity activity = (Activity) diaryRepository.findById(diaryId).orElseThrow(() -> new NotFoundException("해당하는 일기가 없습니다."));
 
-        activity.setActivityType(partialActivityReqDto.getActivityType());
+        activity.setActivityType(diaryReqDto.getActivityType());
 
-        if (partialActivityReqDto.getDuration() != null) {
-            activity.setDuration(partialActivityReqDto.getDuration());
+        if (diaryReqDto.getDuration() != null) {
+            activity.setDuration(diaryReqDto.getDuration());
 
         }
 
-        if (partialActivityReqDto.getDistance() != null) {
-            activity.setDistance(partialActivityReqDto.getDistance());
+        if (diaryReqDto.getDistance() != null) {
+            activity.setDistance(diaryReqDto.getDistance());
         }
 
-        if (StringUtils.hasText(partialActivityReqDto.getLocation())) {
-            activity.setLocation(partialActivityReqDto.getLocation());
+        if (StringUtils.hasText(diaryReqDto.getLocation())) {
+            activity.setLocation(diaryReqDto.getLocation());
         }
 
-        activity.setDate(partialActivityReqDto.getDate());
+        activity.setDate(diaryReqDto.getDate());
 
-        if (StringUtils.hasText(partialActivityReqDto.getDescription())) {
-            activity.setDescription(partialActivityReqDto.getDescription());
+        if (StringUtils.hasText(diaryReqDto.getDescription())) {
+            activity.setDescription(diaryReqDto.getDescription());
         }
 
         ActivityInfoResDto activityInfoResDto = getActivityInfoResDto(activity);
@@ -206,19 +206,19 @@ public class DiaryService {
     }
 
     @Transactional
-    public BehaviorInfoResDto updateBehavior(Long diaryId, PartialBehaviorReqDto partialBehaviorReqDto) {
+    public BehaviorInfoResDto updateBehavior(Long diaryId, DiaryReqDto diaryReqDto) {
         Behavior behavior = (Behavior) diaryRepository.findById(diaryId).orElseThrow(() -> new NotFoundException("해당하는 일기가 없습니다."));
 
-        if (StringUtils.hasText(partialBehaviorReqDto.getBehaviorType())) {
-            behavior.setBehaviorType(partialBehaviorReqDto.getBehaviorType());
+        if (StringUtils.hasText(diaryReqDto.getBehaviorType())) {
+            behavior.setBehaviorType(diaryReqDto.getBehaviorType());
         }
 
-        behavior.setBehaviorIntensity(partialBehaviorReqDto.getBehaviorIntensity());
+        behavior.setBehaviorIntensity(diaryReqDto.getBehaviorIntensity());
 
-        behavior.setDate(partialBehaviorReqDto.getDate());
+        behavior.setDate(diaryReqDto.getDate());
 
-        if (StringUtils.hasText(partialBehaviorReqDto.getDescription())) {
-            behavior.setDescription(partialBehaviorReqDto.getDescription());
+        if (StringUtils.hasText(diaryReqDto.getDescription())) {
+            behavior.setDescription(diaryReqDto.getDescription());
         }
 
         BehaviorInfoResDto behaviorInfoResDto = getBehaviorInfoResDto(behavior);

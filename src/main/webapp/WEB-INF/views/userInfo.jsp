@@ -55,6 +55,9 @@
 
             <div class="pet-section">
                 <h3>내 멍멍이들! 🐕</h3>
+                <div class="table-header">
+                    <button type="button" class="btn pet-register-btn" onclick="openCreatePetPopup()">새 멍멍이 등록! 🐾</button>
+                </div>
                 <table>
                     <thead>
                         <tr>
@@ -97,7 +100,6 @@
                         </c:forEach>
                     </tbody>
                 </table>
-                <button type="button" class="btn" onclick="openCreatePetPopup()">새 멍멍이 등록! 🐾</button>
             </div>
         </div>
     </div>

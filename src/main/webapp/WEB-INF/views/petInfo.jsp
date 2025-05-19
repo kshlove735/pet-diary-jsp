@@ -57,7 +57,7 @@
                 <div id="descriptionError" class="error"></div>
             </div>
             <div class="form-group buttons">
-                <button type="button" id="submitBtn" class="btn full-width"
+                <button type="button" class="btn full-width"
                     onclick="submitPetUpdate('${petInfo.id}')">수정</button>
                 <button type="button" class="btn delete full-width"
                     onclick="confirmPetDelete('${petInfo.id}')">삭제</button>

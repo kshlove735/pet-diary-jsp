@@ -26,7 +26,7 @@
     </nav>
     <main class="container">
         <section class="info-container">
-            <h2>멍멍이 일기 📖</h2>
+            <h2>멍멍 일기 📖</h2>
             <c:if test="${not empty message}">
                 <p style="color: green;">${message}</p>
             </c:if>
@@ -56,8 +56,11 @@
 
             <!-- 일기 목록 -->
             <section class="diary-section">
-                <h3>일기 목록 🐕</h3>
-                <table id = "diaryTable">
+                <div class="diary-header">
+                    <h3>일기 목록 🐕</h3>
+                    <button type="button" class="btn pet-register-btn" onclick="openCreateDiaryPopup()">새 일기 작성! ✍️</button>
+                </div>
+                <table id= "diaryTable">
                     <thead>
                         <tr>
                             <th>반려견</th>
@@ -76,7 +79,6 @@
                 <div id="noData" style="display: none; text-align: center; margin-top: 20px;">
                     <p>일기가 없습니다.</p>
                 </div>
-                <button type="button" class="btn" onclick="openCreateDiaryPopup()">새 일기 작성! ✍️</button>
             </section>
 
             <!-- 페이징 -->

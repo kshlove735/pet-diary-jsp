@@ -3,18 +3,17 @@
 
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PetCare - 일기 수정 🐾</title>
     <link rel="stylesheet" href="/resources/css/styles.css">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+            crossorigin="anonymous"></script>
     <script src="/resources/js/utils.js"></script>
 
 </head>
-
 <body>
     <div class="popup">
         <div class="popup-content">
@@ -60,12 +59,51 @@
     </div>
 
     <script>
-        $(document).ready(function () {
-            const petIdSelect = $('#petId');
-            fetchPetIds(petIdSelect);
-            fetchDiaryData();
+        $(document).ready(async function () {
             setupForm();
+            await initializeData();
         });
+
+        // 데이터 초기화 함수 (비동기 처리를 순차적으로 실행)
+        async function initializeData() {
+            try {
+                // 먼저 반려견 목록을 가져옴
+                await fetchPetIds();
+                // 반려견 목록을 가져온 후 일기 데이터를 가져옴
+                await fetchDiaryData();
+            } catch (error) {
+                console.error('데이터 초기화 오류:', error);
+                showError('데이터를 불러오는 중 오류가 발생했습니다.');
+            }
+        }
+
+        // 반려견 목록 조회
+        async function fetchPetIds() {
+            const petIdSelect = $('#petId');
+            try {
+                const response = await fetch('/api/v1/pet', {
+                    method: 'GET',
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                    credentials: 'include'
+                });
+                
+                const result = await response.json();
+
+                if (result.success) {
+                    petIdSelect.empty().append('<option value="">반려견을 선택하세요</option>');
+                    result.data.forEach(petInfo => {
+                        petIdSelect.append(`<option value="\${petInfo.id}">\${petInfo.name}</option>`);
+                    });
+                    return true;
+                } else {
+                    throw new Error(result.message || '반려견 목록을 불러오지 못했습니다.');
+                }
+            } catch (error) {
+                console.error('반려견 목록 조회 오류:', error);
+                showError('반려견 목록을 불러오지 못했습니다: ' + error.message);
+                return false;
+            }
+        }
 
         // 일기 데이터 조회
         async function fetchDiaryData() {
@@ -76,15 +114,19 @@
                     headers: { 'X-Requested-With': 'XMLHttpRequest' },
                     credentials: 'include'
                 });
+                
                 const result = await response.json();
+                
                 if (result.success) {
                     populateForm(result.data);
+                    return true;
                 } else {
-                    showError('일기 조회 실패: ' + result.message);
+                    throw new Error(result.message || '일기 조회에 실패했습니다.');
                 }
             } catch (error) {
                 console.error('일기 조회 오류:', error);
-                showError('일기 데이터를 불러오지 못했습니다.');
+                showError('일기 데이터를 불러오지 못했습니다: ' + error.message);
+                return false;
             }
         }
 
@@ -96,31 +138,33 @@
             $('#description').val(diary.description || '');
 
             // 유형별 필드 채우기
-            switch (diary.dtype) {
-                case 'activity':
-                    $('#activityType').val(diary.activityType || '');
-                    $('#duration').val(diary.duration || '');
-                    $('#distance').val(diary.distance || '');
-                    $('#location').val(diary.location || '');
-                    break;
-                case 'behavior':
-                    $('#behaviorType').val(diary.behaviorType || '');
-                    $('#behaviorIntensity').val(diary.behaviorIntensity || '');
-                    break;
-                case 'grooming':
-                    $('#groomingType').val(diary.groomingType || '');
-                    break;
-                case 'health':
-                    $('#healthType').val(diary.healthType || '');
-                    $('#nextDueDate').val(diary.nextDueDate || '');
-                    $('#clinic').val(diary.clinic || '');
-                    break;
-                case 'meal':
-                    $('#mealType').val(diary.mealType || '');
-                    $('#foodBrand').val(diary.foodBrand || '');
-                    $('#foodAmount').val(diary.foodAmount || '');
-                    break;
-            }
+            setTimeout(() => {
+                switch (diary.dtype) {
+                    case 'activity':
+                        $('#activityType').val(diary.activityType || '');
+                        $('#duration').val(diary.duration || '');
+                        $('#distance').val(diary.distance || '');
+                        $('#location').val(diary.location || '');
+                        break;
+                    case 'behavior':
+                        $('#behaviorType').val(diary.behaviorType || '');
+                        $('#behaviorIntensity').val(diary.behaviorIntensity || '');
+                        break;
+                    case 'grooming':
+                        $('#groomingType').val(diary.groomingType || '');
+                        break;
+                    case 'health':
+                        $('#healthType').val(diary.healthType || '');
+                        $('#nextDueDate').val(diary.nextDueDate || '');
+                        $('#clinic').val(diary.clinic || '');
+                        break;
+                    case 'meal':
+                        $('#mealType').val(diary.mealType || '');
+                        $('#foodBrand').val(diary.foodBrand || '');
+                        $('#foodAmount').val(diary.foodAmount || '');
+                        break;
+                }
+            }, 100); // 동적 필드가 렌더링된 후 데이터 채우기를 위한 짧은 지연
         }
 
         // 폼 설정 및 동적 필드 렌더링
@@ -342,11 +386,11 @@
                         window.close();
                     }, 1000);
                 } else {
-                    showError('일기 수정 실패: ' + result.message);
+                    throw new Error(result.message || '일기 수정에 실패했습니다.');
                 }
             } catch (error) {
                 console.error('일기 수정 오류:', error);
-                showError('일기 수정 중 오류가 발생했습니다.');
+                showError('일기 수정 중 오류가 발생했습니다: ' + error.message);
             }
         }
     </script>
@@ -356,13 +400,11 @@
             color: red;
             font-size: 0.9em;
         }
-
         .form-group input.invalid,
         .form-group select.invalid,
         .form-group textarea.invalid {
             border-color: red;
         }
-
         .form-group input.valid,
         .form-group select.valid,
         .form-group textarea.valid {
@@ -370,5 +412,4 @@
         }
     </style>
 </body>
-
 </html>

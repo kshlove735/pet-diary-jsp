@@ -34,58 +34,31 @@ public class DiaryController {
         return new ResponseDto<>(true, "일기 리스트 조회 성공", diaryInfoResDtos);
     }
 
+    @GetMapping("/diary/{diaryId}")
+    public ResponseDto getDiary(
+            @PathVariable("diaryId") @Positive(message = "일기 ID는 양수여야 합니다.") Long diaryId
+    ) {
+        DiaryInfoWithJoinResDto diaryinfo = diaryService.getDiaryById(diaryId);
+        return new ResponseDto<>(true, "일기 단일 조회 성공", diaryinfo);
+    }
+
     @PostMapping("/diary/{petId}")
     public ResponseDto createDiary(
             @PathVariable("petId") @Positive(message = "반려견 ID는 양수여야 합니다.") Long petId,
             @RequestBody @Validated DiaryReqDto diaryReqDto
     ) {
 
-        switch (diaryReqDto.getDtype()) {
-            case "activity":
-                ActivityInfoResDto activityInfoResDto = diaryService.createActivity(petId, diaryReqDto);
-                return new ResponseDto<>(true, "운동 기록 등록 성공", activityInfoResDto);
-            case "behavior":
-                BehaviorInfoResDto behaviorInfoResDto = diaryService.createBehavior(petId, diaryReqDto);
-                return new ResponseDto<>(true, "행동 기록 등록 성공", behaviorInfoResDto);
-            case "grooming":
-                GroomingInfoResDto groomingInfoResDto = diaryService.createGrooming(petId, diaryReqDto);
-                return new ResponseDto<>(true, "미용 기록 등록 성공", groomingInfoResDto);
-            case "health":
-                HealthInfoResDto healthInfoResDto = diaryService.createHealth(petId, diaryReqDto);
-                return new ResponseDto<>(true, "건강 기록 등록 성공", healthInfoResDto);
-            case "meal":
-                MealInfoResDto mealInfoResDto = diaryService.createMeal(petId, diaryReqDto);
-                return new ResponseDto<>(true, "식사 기록 등록 성공", mealInfoResDto);
-            default:
-                throw new IllegalArgumentException("지원되지 않는 일기 유형입니다: " + diaryReqDto.getDtype());
-        }
+        ResponseDto diaryInfoResDto = diaryService.createDiary(petId, diaryReqDto);
+        return diaryInfoResDto;
     }
 
     @PutMapping("/diary/{diaryId}")
     public ResponseDto updateDiary(
-            @PathVariable("diaryId") @Positive(message = "반려견 ID는 양수여야 합니다.") Long diaryId,
+            @PathVariable("diaryId") @Positive(message = "일기 ID는 양수여야 합니다.") Long diaryId,
             @RequestBody @Validated DiaryReqDto diaryReqDto
     ) {
-
-        switch (diaryReqDto.getDtype()) {
-            case "activity":
-                ActivityInfoResDto activityInfoResDto = diaryService.updateActivity(diaryId, diaryReqDto);
-                return new ResponseDto<>(true, "운동 기록 수정 성공", activityInfoResDto);
-            case "behavior":
-                BehaviorInfoResDto behaviorInfoResDto = diaryService.updateBehavior(diaryId, diaryReqDto);
-                return new ResponseDto<>(true, "행동 기록 수정 성공", behaviorInfoResDto);
-            case "grooming":
-                GroomingInfoResDto groomingInfoResDto = diaryService.updateGrooming(diaryId, diaryReqDto);
-                return new ResponseDto<>(true, "미용 기록 수정 성공", groomingInfoResDto);
-            case "health":
-                HealthInfoResDto healthInfoResDto = diaryService. updateHealth(diaryId, diaryReqDto);
-                return new ResponseDto<>(true, "건강 기록 수정 성공", healthInfoResDto);
-            case "meal":
-                MealInfoResDto mealInfoResDto = diaryService.updateMeal(diaryId, diaryReqDto);
-                return new ResponseDto<>(true, "식사 기록 수정 성공", mealInfoResDto);
-            default:
-                throw new IllegalArgumentException("지원되지 않는 일기 유형입니다: " + diaryReqDto.getDtype());
-        }
+        ResponseDto diaryInfoResDto = diaryService.updateDiary(diaryId, diaryReqDto);
+        return diaryInfoResDto;
     }
 
     @DeleteMapping("/diary/{diaryId}")

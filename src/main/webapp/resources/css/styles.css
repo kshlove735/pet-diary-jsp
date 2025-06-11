@@ -1,9 +1,9 @@
 /* 기본 레이아웃 */
 body {
-    font-family: 'Comic Sans MS', 'Arial', sans-serif;
+    font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #fff3e0;
+    background-color: #fefaf6; /* 밝은 베이지 */
 }
 
 .container {
@@ -14,30 +14,30 @@ body {
 
 /* 헤더 스타일 */
 .header {
-    background: linear-gradient(to right, #ff6f61, #ffb88c);
+    background: linear-gradient(to right, #a3d2ca, #5eaaa8); /* 민트+청록 */
     color: #fff;
     padding: 15px 0;
     text-align: center;
-    border-radius: 10px;
+    /* border-radius: 10px; */
 }
 
 .header h1 {
     margin: 0;
     font-size: 2.5em;
-    text-shadow: 2px 2px #ff4d4d;
+    text-shadow: 2px 2px #4a7c59;
 }
 
-/* 내비게이션 스타일 */
+/* 내비게이션 */
 .nav {
-    background: #ffd1dc;
+    background: #e4f9f5;
     padding: 10px;
     text-align: center;
-    border-radius: 8px;
+    /* border-radius: 8px; */
     margin: 10px 0;
 }
 
 .nav a {
-    color: #ff4d4d;
+    color: #4a7c59;
     margin: 0 20px;
     text-decoration: none;
     font-weight: bold;
@@ -45,277 +45,101 @@ body {
 }
 
 .nav a:hover {
-    color: #ff1a1a;
+    color: #2e5339;
 }
 
-/* 폼 및 정보 컨테이너 */
-.form-container,
-.info-container {
-    background: #fff;
+/* 폼 컨테이너 (로그인/회원가입) */
+.form-container {
+    background: #ffffff;
     padding: 25px;
-    margin: 20px 0;
     border-radius: 15px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    border: 2px solid #ffd1dc;
+    border: 2px solid #d3edea;
 }
 
-.form-container h2,
-.info-container h2 {
-    color: #ff4d4d;
+.form-container h2 {
+    color: #5eaaa8;
     text-align: center;
     font-size: 1.8em;
 }
 
-/* 폼 그룹 스타일 */
+/* 폼 그룹 */
 .form-group {
     margin-bottom: 15px;
-    position: relative;
 }
 
 .form-group label {
     display: block;
+    margin-bottom: 8px;
     color: #333;
     font-weight: bold;
-    margin-bottom: 8px;
 }
 
-.form-group input,
+/* 입력 필드 전용 스타일 */
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="number"],
+.form-group input[type="date"],
 .form-group select,
 .form-group textarea {
     width: 100%;
     padding: 10px;
-    border: 2px solid #ffd1dc;
+    border: 2px solid #d3edea;
     border-radius: 10px;
     font-size: 1em;
-    background: #fffaf0;
+    background: #f8fefc;
     box-sizing: border-box;
     transition: border-color 0.3s;
 }
 
+/* 포커스 스타일 */
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: #ff6f61;
+    border-color: #5eaaa8;
 }
 
-.form-group input:invalid:not(:placeholder-shown),
-.form-group select:invalid:not(:placeholder-shown),
-.form-group textarea:invalid:not(:placeholder-shown) {
-    border-color: red;
-}
-
-.form-group input:valid:not(:placeholder-shown),
-.form-group select:valid:not(:placeholder-shown),
-.form-group textarea:valid:not(:placeholder-shown) {
-    border-color: green;
-}
-
-/* 비활성화된 입력 필드 스타일 */
-.form-group input[disabled],
-.form-group select[disabled],
-.form-group textarea[disabled] {
-    background-color: #f0f0f0;
-    cursor: not-allowed;
-    border-color: #ccc;
-}
-
-/* textarea 기본 높이 및 크기 조정 가능 */
-.form-group textarea {
-    height: 100px;
-    resize: vertical;
-}
-
-/* 버튼 스타일 */
+/* 버튼 전용 스타일 */
+input[type="submit"],
+input[type="button"],
+button,
 .btn {
-    background: #ff6f61;
+    background: #5eaaa8;
     color: #fff;
     border: none;
     padding: 12px 25px;
-    cursor: pointer;
     border-radius: 12px;
     font-size: 1.1em;
+    cursor: pointer;
     transition: background 0.3s;
-    margin: 5px;
-    display: inline-block;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
+    margin: 5px 0;
 }
 
+input[type="submit"]:hover,
+input[type="button"]:hover,
+button:hover,
 .btn:hover {
-    background: #ff4d4d;
+    background: #4a7c59;
+    color: #fff;
 }
 
-.btn:disabled {
+input:disabled,
+button:disabled {
     background: #ccc;
     cursor: not-allowed;
 }
 
-/* 추가: 수정 버튼 스타일 */
-.btn.edit {
-    background: #ffd1dc;
-    color: #ff4d4d;
-    padding: 8px 12px;
-    font-size: 0.9em;
-}
-
-.btn.edit:hover {
-    background: #ff4d4d;
-    color: #fff;
-}
-
-/* 취소 버튼 스타일 */
-.btn.cancel {
-    background: #999;
-}
-
-.btn.cancel:hover {
-    background: #777;
-}
-
-/* 삭제 버튼 스타일 */
-.btn.delete {
-    background: #999;
-}
-
-.btn.delete:hover {
-    background: #777;
-}
-
-/* 필터 그룹 */
-.filter-group {
-    display: flex;
-    gap: 20px;
-    align-items: flex-end;
-    margin-bottom: 20px;
-}
-
-.filter-group .form-group {
-    flex: 1;
-}
-
-.filter-group select[multiple] {
-    height: 100px;
-    padding: 5px;
-}
-
-/* 페이징 */
-.pagination {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 20px;
-}
-
-.pagination .btn {
-    padding: 8px 12px;
-    font-size: 0.9em;
-}
-
-.pagination .page-number {
-    background: #ffd1dc;
-    color: #ff4d4d;
-}
-
-.pagination .page-number:hover {
-    background: #ff4d4d;
-    color: #fff;
-}
-
-.pagination .page-number.active {
-    background: #ff6f61;
-    color: #fff;
-    padding: 8px 12px;
-    border-radius: 12px;
-}
-
-/* 테이블 세부 정보 컬럼 */
-table td:nth-child(5) {
-    max-width: 300px;
-    word-wrap: break-word;
-}
-
-
-/* 회원가입/수정 버튼 스타일 */
-#submitBtn.full-width {
-    width: 100%;
-    padding: 10px;
-    font-size: 1em;
-    border-radius: 10px;
-    box-sizing: border-box;
-    background: #ff6f61;
-    color: #fff;
-    border: none;
-    transition: background 0.3s;
-    margin: 0;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-}
-
-#submitBtn.full-width:hover {
-    background: #ff4d4d;
-}
-
-#submitBtn.full-width:disabled {
-    background: #ccc;
-    cursor: not-allowed;
-}
-
-/* 취소 버튼 크기 조정 */
-.btn.cancel.full-width,
-.btn.delete.full-width {
-    width: 100%;
-    padding: 10px;
-    font-size: 1em;
-    border-radius: 10px;
-    box-sizing: border-box;
-    margin: 0;
-}
-
-/* 추가: 버튼 컨테이너 (petUpdate.jsp) */
-.form-group.buttons {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 20px;
-}
-
-.form-group.buttons .btn.full-width {
-    width: 48%;
-}
-
-/* 로그인 버튼 스타일 */
-#loginButton {
-    background: #ff6f61;
-    color: #fff;
-    border: none;
-    padding: 12px 25px;
-    cursor: pointer;
-    border-radius: 12px;
-    font-size: 1.1em;
-    transition: background 0.3s;
+.btn.full-width {
     width: 100%;
     box-sizing: border-box;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
 }
 
-#loginButton:hover {
-    background: #ff4d4d;
-}
-
-#loginButton:disabled {
-    background: #ccc;
-    cursor: not-allowed;
-}
-
-/* 비밀번호 토글 버튼 스타일 */
-.toggle-password {
-    background: #ffd1dc;
-    color: #ff4d4d;
+/* 토글 버튼 (비밀번호 표시 등) */
+.toggle-btn {
+    background: #d3edea;
+    color: #4a7c59;
     padding: 8px 12px;
     margin-top: 8px;
     border: none;
@@ -324,214 +148,335 @@ table td:nth-child(5) {
     font-size: 0.9em;
 }
 
-.toggle-password:hover {
-    background: #ff4d4d;
+.toggle-btn:hover {
+    background: #5eaaa8;
     color: #fff;
 }
 
-#changeButton {
-    display: none;
-}
-
-#checkEmailBtn {
-    margin-top: 10px;
-    width: auto;
-    padding: 8px 15px;
-}
-
-/* 에러 및 성공 메시지 */
+/* 에러/성공 메시지 */
 .error {
     color: red;
     font-size: 0.9em;
-    text-align: left;
-    margin-top: 8px;
-    display: block;
+    margin-top: 5px;
 }
 
 .success {
-    color: green;
+    color: #24a424;
     font-size: 0.9em;
-    text-align: left;
-    margin-top: 8px;
+    margin-top: 5px;
 }
 
-/* 테이블 스타일 */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    background: #fffaf0;
-}
-
-table,
-th,
-td {
-    border: 2px solid #ffd1dc;
-}
-
-th,
-td {
-    padding: 12px;
-    text-align: center;
-}
-
-th {
-    background: #ff6f61;
-    color: #fff;
-}
-
-.pet-register-btn {
-    margin-top: 20px;
-    display: inline-block;
-}
-
-.pet-section h3 {
-    color: #ff4d4d;
-    text-align: center;
-    font-size: 1.5em;
-}
-
-.pet-section {
-    margin-top: 30px;
-}
-
-/* 팝업 창 스타일 */
-.popup {
-    padding: 20px;
-    background-color: #fff;
-    max-width: 100%;
-    margin: 0 auto;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    border: 2px solid #ffd1dc;
-    box-sizing: border-box;
-    height: 100%;
-    overflow: auto;
-}
-
-.popup-content {
-    max-width: 400px;
-    margin: 0 auto;
-}
-
-.popup h2 {
-    color: #ff4d4d;
-    text-align: center;
-    font-size: 1.5em;
-    margin: 0 0 20px 0;
-}
-
-.popup .form-group input,
-.popup .form-group textarea {
-    padding: 8px;
-    font-size: 0.9em;
-}
-
-/* 반응형 디자인 */
-@media (max-width: 800px) {
+/* 반응형 공통 */
+@media (max-width: 768px) {
     .container {
         width: 90%;
     }
-
-    .form-container,
-    .info-container {
+    .form-container {
         padding: 15px;
     }
-
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-        padding: 8px;
-        font-size: 0.9em;
-    }
-
     .btn {
-        padding: 10px 20px;
         font-size: 1em;
-    }
-
-    .btn.edit {
-        padding: 6px 10px;
-        font-size: 0.85em;
-    }
-
-    #submitBtn.full-width,
-    .btn.cancel.full-width,
-    .btn.delete.full-width {
-        padding: 8px;
-        font-size: 0.9em;
-    }
-
-    .form-group.buttons .btn.full-width {
-        width: 47%;
-    }
-
-    .filter-group {
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .filter-group select[multiple] {
-        height: 80px;
-    }
-
-    .pagination .btn {
-        padding: 6px 10px;
-        font-size: 0.85em;
-    }
-
-    table td:nth-child(5) {
-        max-width: 200px;
+        padding: 10px 20px;
     }
 }
 
-@media (max-width: 600px) {
-    .popup {
-        padding: 15px;
-    }
+/* ====================== */
+/* userInfo.jsp 전용 스타일 */
+/* ====================== */
 
-    .popup-content {
-        max-width: 100%;
-    }
+.info-container {
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
 
-    .popup h2 {
-        font-size: 1.3em;
-        margin-bottom: 15px;
-    }
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
 
-    .popup .form-group input,
-    .popup .form-group textarea {
-        font-size: 0.85em;
-        padding: 7px;
-    }
+.section-header h2,
+.section-header h3 {
+    margin: 0;
+    color: #5eaaa8;
+}
 
-    .btn.edit {
-        padding: 5px 8px;
-        font-size: 0.8em;
-    }
+.btn.edit-btn {
+    background: transparent;
+    color: #5eaaa8;
+    border: 2px solid #5eaaa8;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.9em;
+    transition: background 0.3s, color 0.3s;
+}
 
-    #submitBtn.full-width,
-    .btn.cancel.full-width,
-    .btn.delete.full-width {
-        padding: 7px;
-        font-size: 0.85em;
-    }
+.btn.edit-btn:hover {
+    background: #5eaaa8;
+    color: #fff;
+}
 
-    .form-group.buttons .btn.full-width {
-        width: 46%;
-    }
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
 
-    .filter-group select[multiple] {
-        height: 60px;
-        font-size: 0.85em;
-    }
+.form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+}
 
-    .pagination .btn {
-        padding: 5px 8px;
-        font-size: 0.8em;
-    }
+.btn-primary {
+    background: #5eaaa8;
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 0.9em;
+}
 
-    table td:nth-child(5) {
-        max-width: 150px;
+.btn-secondary {
+    background: #d3edea;
+    color: #4a7c59;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 0.9em;
+}
+
+.btn-danger {
+    background: #e4563c;
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 0.9em;
+}
+
+.btn-primary:hover,
+.btn-secondary:hover,
+.btn-danger:hover {
+    opacity: 0.9;
+}
+
+/* pet-section 그리드 카드 */
+.pet-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.pet-card {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.pet-card h4 {
+    margin: 0 0 10px;
+    color: #4a7c59;
+    font-size: 1.2em;
+}
+
+.pet-card p {
+    margin: 5px 0;
+    font-size: 0.9em;
+}
+
+.pet-card .desc {
+    flex-grow: 1;
+    margin: 10px 0;
+    color: #666;
+}
+
+.pet-card .edit-pet-btn {
+    align-self: flex-end;
+    padding: 6px 12px;
+    font-size: 0.85em;
+}
+
+/* 모바일 대응 */
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
     }
+}
+
+/* ====================== */
+/* 팝업 공통 레이아웃 */
+/* (passwordChange, createPet 등) */
+/* ====================== */
+
+body.popup {
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.popup-content {
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 400px;
+    position: relative;
+}
+
+.close-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: transparent;
+    border: none;
+    font-size: 1.2em;
+    cursor: pointer;
+}
+
+.popup-title {
+    margin: 0 0 20px;
+    font-size: 1.5em;
+    color: #4a7c59;
+    text-align: center;
+}
+
+.form-actions.center {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.btn.full-width {
+    width: 100%;
+}
+
+/* placeholder 폰트 크기를 input 폰트 크기에 맞춤 */
+.popup-content input::placeholder,
+.popup-content textarea::placeholder {
+    font-size: 1em;
+    line-height: 1.5;
+    color: #ccc;
+}
+
+/* diaryList.jsp 전용 스타일 */
+
+/* 필터 그룹 (select + 버튼) */
+.filter-group {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    margin-bottom: 20px;
+}
+.filter-group .form-group {
+    flex: 1;
+    min-width: 150px;
+}
+
+/* “일기 없음” 메시지 */
+#noData {
+    text-align: center;
+    padding: 40px 0;
+    color: #666;
+}
+
+/* 카드 그리드 (재사용) */
+/* .pet-grid, .pet-card는 이미 정의되어 있습니다 */
+
+/* 페이징 컨테이너 */
+.pagination {
+    margin-top: 20px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* 페이지 번호 버튼 */
+.page-number {
+    background: #d3edea;       /* 연한 민트 */
+    color: #4a7c59;            /* 짙은 민트 글자 */
+    border: none;
+    border-radius: 8px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background 0.3s, color 0.3s;
+    display: inline-block;
+}
+.page-number:hover {
+    background: #5eaaa8;       /* 호버 시 진한 민트 */
+    color: #fff;
+}
+
+/* 현재 페이지 강조 */
+.page-number.active {
+    background: #5eaaa8 !important;  /* 진한 민트 */
+    color: #fff !important;
+    cursor: default;
+}
+
+
+/* 추가 */
+.filter-group {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.filter-item {
+    flex: 1;
+    min-width: 150px;
+}
+
+.checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.checkbox-pill {
+    display: inline-flex;
+    align-items: center;
+    background: #f8fefc;
+    border: 2px solid #d3edea;
+    border-radius: 20px;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: background 0.3s, border-color 0.3s;
+}
+
+.checkbox-pill input {
+    margin-right: 6px;
+    accent-color: #5eaaa8; /* 크롬 계열 체크박스 색상 */
+}
+
+.checkbox-pill:hover {
+    background: #e4f9f5;
+    border-color: #a3d2ca;
+}
+
+/* 검색 버튼 위치 조정 */
+.search-btn {
+    align-self: flex-end;
+    margin-top: 32px;
+}
+
+/* 페이징: 현재 페이지 강조 (이미 적용된 .page-number.active) */
+.page-number.active {
+    background: #5eaaa8 !important;
+    color: #fff !important;
 }

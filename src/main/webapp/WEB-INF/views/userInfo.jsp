@@ -4,112 +4,91 @@
 
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PetCare - 멍멍 정보 🐾</title>
+    <title>PetCare - 유저 정보 🐾</title>
     <link rel="stylesheet" href="/resources/css/styles.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-
 <body>
-    <div class="header">
+    <header class="header">
         <h1>PetCare 🐶🐾</h1>
-    </div>
-    <div class="nav">
+    </header>
+    <nav class="nav">
         <a href="/auth/signup">회원가입</a>
         <a href="/auth/login">로그인</a>
         <a href="/user">유저 정보</a>
         <a href="/diary">멍멍 일기</a>
-    </div>
-    <div class="container">
-        <div class="info-container">
-            <h2>나와 멍멍이의 정보! 🐶</h2>
-            <c:if test="${not empty message}">
-                <p style="color: green;">${message}</p>
-            </c:if>
+    </nav>
+    <main class="container">
+        <!-- 사용자 정보 카드 -->
+        <section class="info-container">
+            <div class="section-header">
+                <h2>내 정보</h2>
+                <button type="button" class="btn edit-btn" onclick="enableEdit()">✏️ 수정</button>
+            </div>
             <form id="userInfoForm">
-                <div class="form-group">
-                    <label for="info-email">이메일</label>
-                    <input type="email" id="info-email" name="email" disabled value="${userInfo.email}">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="info-email">이메일</label>
+                        <input type="email" id="info-email" name="email" disabled value="${userInfo.email}">
+                    </div>
+                    <div class="form-group">
+                        <label for="info-name">이름</label>
+                        <input type="text" id="info-name" name="name" disabled value="${userInfo.name}">
+                        <div id="nameError" class="error"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="info-phone">전화번호</label>
+                        <input type="text" id="info-phone" name="phone" disabled value="${userInfo.phone}">
+                        <div id="phoneError" class="error"></div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="info-name">이름</label>
-                    <input type="text" id="info-name" name="name" disabled value="${userInfo.name}">
-                    <div id="nameError" class="error"></div>
-                </div>
-                <div class="form-group">
-                    <label for="info-phone">전화번호</label>
-                    <input type="text" id="info-phone" name="phone" disabled value="${userInfo.phone}">
-                    <div id="phoneError" class="error"></div>
-                </div>
-                <div class="form-group">
-                    <button type="button" id="editButton" class="btn" onclick="enableEdit()">정보 수정</button>
-                    <button type="button" id="changeButton" class="btn" onclick="submitChanges()"
-                        style="display:none">변경</button>
-                    <button type="button" class="btn" onclick="openPasswordChangePopup()">비밀번호 수정</button>
-                    <button type="button" class="btn" onclick="confirmDelete()">회원 탈퇴</button>
+                <div class="form-actions">
+                    <button type="button" id="changeButton" class="btn btn-primary" style="display:none" onclick="submitChanges()">저장</button>
+                    <button type="button" class="btn btn-secondary" onclick="openPasswordChangePopup()">비밀번호 변경</button>
+                    <button type="button" class="btn btn-danger" onclick="confirmDelete()">회원 탈퇴</button>
                 </div>
             </form>
+        </section>
 
-            <div class="pet-section">
-                <h3>내 멍멍이들! 🐕</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>이름</th>
-                            <th>종</th>
-                            <th>생일</th>
-                            <th>성별</th>
-                            <th>무게(kg)</th>
-                            <th>설명</th>
-                            <th>수정</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <c:forEach var="petInfo" items="${userInfo.petInfos}" varStatus="status">
-                            <tr>
-                                <td>${petInfo.name}</td>
-                                <td>${petInfo.breed}</td>
-                                <td>${petInfo.birthDate}</td>
-                                <c:if test="${petInfo.gender == 'MALE'}">
-                                    <td>남자</td>
-                                </c:if>
-                                <c:if test="${petInfo.gender == 'FEMALE'}">
-                                    <td>여자</td>
-                                </c:if>
-                                <td>${petInfo.weight}</td>
-                                <td>
-                                    <c:choose>
-                                        <c:when test="${fn:length(petInfo.description) > 15}">
-                                            ${fn:substring(petInfo.description, 0, 15)}...
-                                        </c:when>
-                                        <c:otherwise>
-                                            ${petInfo.description}
-                                        </c:otherwise>
-                                    </c:choose>
-                                </td>
-                                <td>
-                                    <button type="button" class="btn edit" onclick="openPetInfoPopup('${petInfo.id}')">수정</button>
-                                </td>
-                            </tr>
-                        </c:forEach>
-                    </tbody>
-                </table>
-                <button type="button" class="btn" onclick="openCreatePetPopup()">새 멍멍이 등록! 🐾</button>
+        <!-- 반려견 카드 그리드 -->
+        <section class="info-container pet-section">
+            <div class="section-header">
+                <h2>내 멍멍이</h2>
+                <button type="button" class="btn btn-primary" onclick="openCreatePetPopup()">새 멍멍이 등록</button>
             </div>
-        </div>
-    </div>
+            <div class="pet-grid">
+                <c:forEach var="petInfo" items="${userInfo.petInfos}" varStatus="status">
+                    <div class="pet-card">
+                        <h4>${petInfo.name}</h4>
+                        <p><strong>품종:</strong> ${petInfo.breed}</p>
+                        <p><strong>생일:</strong> ${petInfo.birthDate}</p>
+                        <p><strong>성별:</strong> <c:choose><c:when test="${petInfo.gender == 'MALE'}">남자</c:when><c:otherwise>여자</c:otherwise></c:choose></p>
+                        <p><strong>무게:</strong> ${petInfo.weight}kg</p>
+                        <p class="desc">
+                            <c:choose>
+                                <c:when test="${fn:length(petInfo.description) > 15}">
+                                    ${fn:substring(petInfo.description, 0, 15)}...
+                                </c:when>
+                                <c:otherwise>
+                                    ${petInfo.description}
+                                </c:otherwise>
+                            </c:choose>
+                        </p>
+                        <button type="button" class="btn btn-secondary edit-pet-btn" onclick="openPetInfoPopup('${petInfo.id}')">수정</button>
+                    </div>
+                </c:forEach>
+            </div>
+        </section>
+    </main>
 
     <script>
         function enableEdit() {
-            document.querySelectorAll('#userInfoForm input:not(#info-email)').forEach(input => {
-                input.disabled = false;
-            });
-            document.getElementById('editButton').style.display = 'none';
+            document.querySelectorAll('#userInfoForm input:not(#info-email)').forEach(input => input.disabled = false);
             document.getElementById('changeButton').style.display = 'inline-block';
-            // 이전 오류 메시지 지우기
+            document.querySelector('.edit-btn').style.display = 'none';
             $('#nameError, #phoneError').text('').removeClass('error');
         }
 
@@ -178,7 +157,7 @@
 
                 if (result.success) {
                     // 팝업 창 크기
-                    const width = 500;
+                    const width = 405;
                     const height = 400;
 
                     // 현재 창의 위치와 크기를 기준으로 팝업 창 중앙 정렬
@@ -252,8 +231,8 @@
 
                 if (result.success) {
                     // 팝업 창 크기
-                    const width = 500;
-                    const height = 400;
+                    const width = 400;
+                    const height = 805;
 
                     // 현재 창의 위치와 크기를 기준으로 팝업 창 중앙 정렬
                     const windowWidth = window.outerWidth || 1920; // 현재 창 너비
@@ -294,8 +273,8 @@
 
                 if (result.success) {
                     // 팝업 창 크기
-                    const width = 500;
-                    const height = 400;
+                    const width = 400;
+                    const height = 805;
 
                     // 현재 창의 위치와 크기를 기준으로 팝업 창 중앙 정렬
                     const windowWidth = window.outerWidth || 1920; // 현재 창 너비
@@ -321,5 +300,4 @@
         }
     </script>
 </body>
-
 </html>

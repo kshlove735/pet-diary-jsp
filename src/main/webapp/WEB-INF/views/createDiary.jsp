@@ -109,16 +109,16 @@
                             </select>
                         </div>
                         <div class="form-group">
+                            <label for="location">장소</label>
+                            <input type="text" id="location" name="location" placeholder="예: 공원">
+                        </div>
+                        <div class="form-group">
                             <label for="duration">시간(분)</label>
                             <input type="number" id="duration" name="duration" min="0" step="1" placeholder="예: 30">
                         </div>
                         <div class="form-group">
                             <label for="distance">거리(km)</label>
                             <input type="number" id="distance" name="distance" min="0" step="0.01" placeholder="예: 1.5">
-                        </div>
-                        <div class="form-group">
-                            <label for="location">장소</label>
-                            <input type="text" id="location" name="location" placeholder="예: 공원">
                         </div>`;
                 case 'behavior':
                     return `

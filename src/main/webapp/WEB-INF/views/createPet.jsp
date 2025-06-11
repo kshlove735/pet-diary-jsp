@@ -8,55 +8,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PetCare - 반려견 등록 🐾</title>
+    <title>새 멍멍이 등록 🐶</title>
     <link rel="stylesheet" href="/resources/css/styles.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body class="popup">
     <div class="popup-content">
-        <h2>새 멍멍이 등록 🐶</h2>
+        <button type="button" class="btn close-btn" onclick="window.close()">✖</button>
+        <h2 class="popup-title">새 멍멍이 등록 🐶</h2>
         <form id="petRegisterForm">
-            <div class="form-group">
-                <label for="name">이름</label>
-                <input type="text" id="name" name="name" placeholder="반려견 이름 (한글, 영문, 공백 1~50자)"
-                    pattern="^[a-zA-Z가-힣\s]+$" maxlength="50" required>
-                <div id="nameError" class="error"></div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="name">이름</label>
+                    <input type="text" id="name" name="name" placeholder="반려견 이름 (1~50자, 한글/영문)"
+                        pattern="^[a-zA-Z가-힣\s]+$" maxlength="50" required />
+                    <div id="nameError" class="error"></div>
+                </div>
+                <div class="form-group">
+                    <label for="breed">품종</label>
+                    <input type="text" id="breed" name="breed" placeholder="품종 (1~50자)" maxlength="50" required />
+                    <div id="breedError" class="error"></div>
+                </div>
+                <div class="form-group">
+                    <label for="birthDate">생년월일</label>
+                    <input type="date" id="birthDate" name="birthDate" max="<%= java.time.LocalDate.now() %>"
+                        required />
+                    <div id="birthDateError" class="error"></div>
+                </div>
+                <div class="form-group">
+                    <label for="gender">성별</label>
+                    <select id="gender" name="gender" required>
+                        <option value="" disabled selected>성별을 선택하세요</option>
+                        <option value="MALE">남자</option>
+                        <option value="FEMALE">여자</option>
+                    </select>
+                    <div id="genderError" class="error"></div>
+                </div>
+                <div class="form-group">
+                    <label for="weight">몸무게 (kg)</label>
+                    <input type="number" id="weight" name="weight" placeholder="0.01~999.99kg" step="0.01" min="0.01"
+                        max="999.99" required />
+                    <div id="weightError" class="error"></div>
+                </div>
+                <div class="form-group full-width">
+                    <label for="description">설명</label>
+                    <textarea id="description" name="description" placeholder="반려견 설명 (최대 500자)" maxlength="500"
+                        rows="4"></textarea>
+                    <div id="descriptionError" class="error"></div>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="breed">품종</label>
-                <input type="text" id="breed" name="breed" placeholder="품종 (1~50자)" maxlength="50" required>
-                <div id="breedError" class="error"></div>
-            </div>
-            <div class="form-group">
-                <label for="birthDate">생년월일</label>
-                <input type="date" id="birthDate" name="birthDate" max="<%= java.time.LocalDate.now() %>" required>
-                <div id="birthDateError" class="error"></div>
-            </div>
-            <div class="form-group">
-                <label for="gender">성별</label>
-                <select id="gender" name="gender" required>
-                    <option value="" disabled selected>성별을 선택하세요</option>
-                    <option value="MALE">남자</option>
-                    <option value="FEMALE">여자</option>
-                </select>
-                <div id="genderError" class="error"></div>
-            </div>
-            <div class="form-group">
-                <label for="weight">몸무게 (kg)</label>
-                <input type="number" id="weight" name="weight" placeholder="몸무게 (0.01~999.99kg)" step="0.01" min="0.01"
-                    max="999.99" required>
-                <div id="weightError" class="error"></div>
-            </div>
-            <div class="form-group">
-                <label for="description">설명</label>
-                <textarea id="description" name="description" placeholder="반려견에 대한 설명 (최대 500자)"
-                    maxlength="500"></textarea>
-                <div id="descriptionError" class="error"></div>
-            </div>
-            <div class="form-group">
-                <button type="button" id="submitBtn" class="btn full-width"
-                    onclick="submitPetRegistration()">등록</button>
+            <div class="form-actions center">
+                <button type="button" id="submitBtn" class="btn btn-primary full-width"
+                    onclick="submitPetRegistration()">등록하기</button>
             </div>
         </form>
     </div>
@@ -85,22 +89,20 @@
         });
 
         function submitPetRegistration() {
-            const form = document.getElementById('petRegisterForm');
+            const form = $('#petRegisterForm')[0];
             const data = {
-                name: form.querySelector('#name').value,
-                breed: form.querySelector('#breed').value,
-                birthDate: form.querySelector('#birthDate').value,
-                gender: form.querySelector('#gender').value,
-                weight: parseFloat(form.querySelector('#weight').value),
-                description: form.querySelector('#description').value
+                name: form.name.value,
+                breed: form.breed.value,
+                birthDate: form.birthDate.value,
+                gender: form.gender.value == '' ? null : form.gender.value,
+                weight: parseFloat(form.weight.value),
+                description: form.description.value
             };
 
-            console.log('POST 요청 전송: /api/v1/pet, 데이터:', data);
+            console.log("data", data);
 
-            // 에러 메시지 초기화
-            $('#nameError, #breedError, #birthDateError, #genderError, #weightError, #descriptionError')
-                .text('').removeClass('error');
-
+            // 오류 초기화
+            $('.error').text('').removeClass('error');
             fetch('/api/v1/pet', {
                 method: 'POST',
                 headers: {
@@ -110,16 +112,15 @@
                 body: JSON.stringify(data),
                 credentials: 'include'
             })
-                .then(response => response.json())
+                .then(res => res.json())
                 .then(result => {
-                    console.log('응답:', result);
                     if (result.success) {
                         alert('반려견이 성공적으로 등록되었습니다!');
 
                         // 부모 창 새로고침 및 팝업 창 닫기
-                        if(window.opener && !window.opener.closed) {
+                        if (window.opener && !window.opener.closed) {
                             window.opener.location.reload();
-                        }else{
+                        } else {
                             console.warn('부모 창이 존재하지 않거나 닫혔습니다.')
                         }
                         window.close();
@@ -150,7 +151,7 @@
                 })
                 .catch(error => {
                     console.error('POST /api/v1/pet 오류:', error);
-                    alert('반려견 등록 중 오류가 발생했습니다.');
+                    alert('등록 중 오류가 발생했습니다.');
                 });
         }
     </script>

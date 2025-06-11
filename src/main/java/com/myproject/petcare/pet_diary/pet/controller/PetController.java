@@ -44,7 +44,6 @@ public class PetController {
             @PathVariable("petId") Long petId,
             @RequestBody @Validated PartialPetReqDto partialPetReqDto) {
 
-        System.out.println("partialPetReqDto = " + partialPetReqDto);
         PetInfoResDto petInfoResDto = petService.updatePet(petId, partialPetReqDto);
 
         return new ResponseDto<>(true, "반려견 정보 수정 조회 성공", petInfoResDto);

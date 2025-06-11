@@ -14,19 +14,18 @@
 </head>
 
 <body>
-    <div class="header">
+    <header class="header">
         <h1>PetCare 🐶🐾</h1>
-    </div>
-    <div class="nav">
+    </header>
+    <nav class="nav">
         <a href="/auth/signup">회원가입</a>
         <a href="/auth/login">로그인</a>
         <a href="/user">유저 정보</a>
         <a href="/diary">멍멍 일기</a>
-    </div>
-    <div class="container">
-        <div class="form-container">
+    </nav>
+    <main class="container">
+        <section class="form-container">
             <h2>로그인해서 멍멍이 만나러 가요! 🐾</h2>
-            <form:errors path="loginReqDto.*" cssClass="error" element="p" />
             <form:form modelAttribute="loginReqDto" action="/auth/login" method="post" id="loginForm">
                 <div class="form-group">
                     <form:label path="email" for="login-username">이메일</form:label>
@@ -35,25 +34,23 @@
                 </div>
                 <div class="form-group">
                     <form:label path="password" for="login-password">비밀번호</form:label>
-                    <form:input path="password" type="password" id="login-password" placeholder="비밀번호를 입력하세요!"
-                        required="true" />
-                    <form:errors path="password" cssClass="error" />
+                    <form:input path="password" type="password" id="login-password" placeholder="비밀번호를 입력하세요!" required="true" />
+                    <form:errors path="password" cssClass="error" element="div" />
                     <!-- 비밀번호 표시/숨기기 토글 -->
-                    <button type="button" class="btn toggle-password" onclick="togglePasswordVisibility()">비밀번호
-                        표시</button>
+                    <button type="button" class="btn toggle-btn" onclick="togglePasswordVisibility()">비밀번호 표시</button>
                 </div>
                 <div class="form-group">
-                    <input type="submit" value="로그인" id="loginButton" class="btn" aria-label="로그인 버튼">
+                    <input type="submit" value="로그인" id="loginButton" class="btn full-width" aria-label="로그인 버튼">
                 </div>
             </form:form>
-        </div>
-    </div>
+        </section>
+    </main>
 
     <script>
         // 추가: 비밀번호 표시/숨기기 토글 기능
         function togglePasswordVisibility() {
             const passwordInput = document.getElementById('login-password');
-            const toggleButton = document.querySelector('.toggle-password');
+            const toggleButton = document.querySelector('.toggle-btn');
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
                 toggleButton.textContent = '비밀번호 숨기기';

@@ -15,24 +15,18 @@
 </head>
 
 <body>
-    <div class="header">
+    <header class="header">
         <h1>PetCare 🐶🐾</h1>
-    </div>
-    <div class="nav">
+    </header>
+    <nav class="nav">
         <a href="/auth/signup">회원가입</a>
         <a href="/auth/login">로그인</a>
         <a href="/user">유저 정보</a>
         <a href="/diary">멍멍 일기</a>
-    </div>
-    <div class="container">
-        <div class="form-container">
-            <h2>가입하고 멍멍이와 함께해요! 🐕</h2>
-            <c:if test="${not empty message}">
-                <p class="success">${message}</p>
-            </c:if>
-            <c:if test="${not empty error}">
-                <p class="error">${error}</p>
-            </c:if>
+    </nav>
+    <main class="container">
+        <section class="form-container">
+            <h2>멍멍이의 새로운 친구가 되어주세요! 🐕</h2>
             <form:form modelAttribute="signupReqDto" action="/auth/signup" method="post" id="signupForm">
                 <form:hidden path="emailChecked" value="false" />
                 <div class="form-group">
@@ -40,33 +34,27 @@
                     <form:input type="email" id="email" path="email" placeholder="이메일을 입력하세요!" required="true" />
                     <form:errors path="email" cssClass="error" />
                     <div id="emailError" class="error"></div>
-                    <button type="button" id="checkEmailBtn" class="btn" onclick="checkEmailAvailability()">이메일 중복
-                        검사</button>
-
-
+                    <button type="button" id="checkEmailBtn" class="btn toggle-btn" onclick="checkEmailAvailability()">이메일 중복 검사</button>
                 </div>
                 <div class="form-group">
                     <label for="password">비밀번호</label>
-                    <form:input type="password" id="password" path="password"
-                        placeholder="비밀번호(영문 대 소문자, 숫자, 특수문자 포함 8~16자)를 입력하세요!" required="true" />
+                    <form:input type="password" id="password" path="password" placeholder="비밀번호(영문 대 소문자, 숫자, 특수문자 포함 8~16자)를 입력하세요!" required="true" />
                     <form:errors path="password" cssClass="error" />
                 </div>
                 <div class="form-group">
                     <label for="passwordCheck">비밀번호 확인</label>
-                    <form:input type="password" id="passwordCheck" path="passwordCheck" placeholder="비밀번호를 재입력하세요!"
-                        required="true" />
+                    <form:input type="password" id="passwordCheck" path="passwordCheck" placeholder="비밀번호를 재입력하세요!" required="true" />
                     <form:errors path="passwordCheck" cssClass="error" />
+                    <div id="passwordCheckError" class="error"></div>
                 </div>
                 <div class="form-group">
                     <label for="name">이름</label>
-                    <form:input type="text" id="name" path="name" placeholder="이름(특수문자를 제외한 2~10자)을 입력하세요!"
-                        required="true" />
+                    <form:input type="text" id="name" path="name" placeholder="이름(특수문자를 제외한 2~10자)을 입력하세요!" required="true" />
                     <form:errors path="name" cssClass="error" />
                 </div>
                 <div class="form-group">
                     <label for="phone">전화번호</label>
-                    <form:input type="text" id="phone" path="phone" placeholder="전화번호(예: 010-1234-5678)"
-                        required="true" />
+                    <form:input type="text" id="phone" path="phone" placeholder="전화번호(예: 010-1234-5678)" required="true" />
                     <div id="phoneError" class="error"></div>
                     <form:errors path="phone" cssClass="error" />
                 </div>
@@ -74,8 +62,9 @@
                     <input type="submit" id="submitBtn" class="btn full-width" value="가입하기" disabled="true">
                 </div>
             </form:form>
-        </div>
-    </div>
+        </section>
+    </main>
+
     <script>
         let isEmailChecked = false; // 이메일 중복 검사 여부 플래그
 
@@ -87,6 +76,7 @@
             });
 
 
+            // 이메일 중복 검사
             async function checkEmailAvailability() {
                 // 이전 오류 메시지 지우기
                 $('#emailError').text('').addClass('success').removeClass('error');
@@ -131,7 +121,7 @@
             }
 
             // 비밀번호 일치 확인
-            $("#password, #passwordCheck").on("input", function () {
+            $("#passwordCheck").on("input", function () {
                 const password = $("#password").val();
                 const passwordCheck = $("#passwordCheck").val();
                 if (password && passwordCheck && password !== passwordCheck) {
